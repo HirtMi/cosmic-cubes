@@ -79,31 +79,35 @@ function connectPoints(p1, p2){
     ctx.stroke();
 }
 
-let point1 = new Point(100,100);
-let point2 = new Point(200,200);
-connectPoints(point1, point2);
+
+
 function Polygon(x, y, sides, size){
     this.centerX = x;
     this.centerY = y;
     this.size = size;
-    this.polygon = [];
-
-    //maybe use vectors to find points?//
-    //dont draw vectors, but the end points of the lines you can push to polygon array//
-    //first point could be straight up, then you can rotate all points after construction for cases like square//
-
+    this.angle = 360 / sides;
+    this.points = [];
+    
     this.construct = function(){
-        for (let i = 1; i < sides; i ++){
-            //apply rotation matrix to previous point to find next point, start with this.point1//
+        for (let i = 1; i <= sides; i ++){
+            let vector = new Vector(this.centerX, this.centerY, this.angle * i, this.size);
+            vector.construct();
+            let point = new Point(vector.endX, vector.endY);
+            this.points.push(point);
         }
     }
 
     this.draw = function(){
-        //connect points in array//
+        for (let i = 0; i < this.points.length - 1; i++){
+            connectPoints(this.points[i], this.points[i+1])
+        }
+        connectPoints(this.points[0], this.points[this.points.length - 1]);
     }
 }
 
-//make polygon a list of points, then just have function that connects the points//
+let test1 = new Polygon(0,0, 8, 100);
+test1.construct();
+test1.draw();
 
 
 
