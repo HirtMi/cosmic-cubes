@@ -80,18 +80,60 @@ function connectPoints(p1, p2){
 }
 
 
+function Circle (x, y, radius, lineWidth, color, expansionSpeed){
+    this.x = x;
+    this.y = y;
+    this.r = radius;
+    this.lineWidth = lineWidth;
+    this.color = color;
+    this.speed = expansionSpeed;
+    this.collapse = false;
+
+    this.draw = function() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.strokeStyle = this.color
+        ctx.lineWidth = this.lineWidth;
+        ctx.stroke();
+    }
+
+    this.expand = function() {
+        this.r += this.speed;
+    }
+
+    this.shrink = function() {
+        this.r -= this.speed;
+    }
+
+    this.moveX = function(dx){
+        this.x += dx;
+    }
+
+    this.moveY = function(dy){
+        this.y -= dy;
+    }
+
+    this.randomizeColor = function(probability){
+        if (Math.random() < probability){
+            this.color = "#" + Math.floor(Math.random()*16777215).toString(16);
+        }
+    }
+}
+
 
 function Polygon(x, y, sides, size){
     this.centerX = x;
     this.centerY = y;
     this.size = size;
     this.angle = 360 / sides;
+    this.vectors = [];
     this.points = [];
-    
+
     this.construct = function(){
         for (let i = 1; i <= sides; i ++){
             let vector = new Vector(this.centerX, this.centerY, this.angle * i, this.size);
             vector.construct();
+            this.vectors.push(vector);
             let point = new Point(vector.endX, vector.endY);
             this.points.push(point);
         }
@@ -103,14 +145,30 @@ function Polygon(x, y, sides, size){
         }
         connectPoints(this.points[0], this.points[this.points.length - 1]);
     }
+
+    this.rotate = function(angle){
+        for (let i = 0; i < this.vectors.length; i++){
+            this.vectors[i].rotate(angle);
+            this.vectors[i].construct();
+        }
+        for (let i = 0; i < this.points.length; i++){
+            this.points[i].x = this.vectors[i].endX;
+            this.points[i].y = this.vectors[i].endY;
+        }
+    }
 }
 
-let test1 = new Polygon(0,0, 8, 100);
+let test1 = new Polygon(0, 0, 3, 100);
 test1.construct();
 test1.draw();
+console.log(test1.points);
+test1.rotate(60);
+test1.draw();
+console.log(test1.points);
 
 
-
+let origin = new Circle(0, 0, 3, 1, "black");
+origin.draw();
 
 
 
