@@ -169,19 +169,15 @@ setStroke(1, "black");
 let origin = new Circle(0, 0, 3);
 origin.draw();
 
-let outline = new Circle(0,0,100);
+let outline = new Circle(0,0,20*11);
 outline.draw();
 
-let polygon = new Polygon(0,0,8,100);
-polygon.construct();
-polygon.draw();
-console.log(polygon.points)
-polygon.dilate(2);
-polygon.draw();
-console.log(polygon.points)
-polygon.draw();
-polygon.dilate(0.3);
-polygon.draw();
+for (let i = 3; i < 12; i++){
+    let polygon = new Polygon(0,0,i,20*i);
+    polygon.construct();
+    polygon.draw();
+}
+
 // End Testing //
 
 
