@@ -137,6 +137,7 @@ function Polygon(x, y, sides, size){
             let point = new Point(vector.endX, vector.endY);
             this.points.push(point);
         }
+        this.rotate(this.angle + 90);
     }
 
     this.draw = function(){
@@ -158,17 +159,15 @@ function Polygon(x, y, sides, size){
     }
 }
 
-let test1 = new Polygon(0, 0, 3, 100);
-test1.construct();
-test1.draw();
-console.log(test1.points);
-test1.rotate(60);
-test1.draw();
-console.log(test1.points);
-
-
 let origin = new Circle(0, 0, 3, 1, "black");
 origin.draw();
+
+let outline = new Circle(0,0,100,1,"black");
+outline.draw();
+
+let polygon = new Polygon(0,0,8,100);
+polygon.construct();
+polygon.draw();
 
 
 
