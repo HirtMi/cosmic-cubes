@@ -32,15 +32,20 @@ function Line(startX, startY, endX, endY, lineWidth, color){
     }
 }
 
-function Vector(startX, startY, angle, magnitude){
+
+function Vector(startX, startY, angle, magnitude, lineWidth, color){
+    this.startX = startX;
+    this.startY = startY;
     this.angle = angle;
     this.rads = (Math.PI / 180) * this.angle;
     this.magnitude = magnitude;
+    this.lineWidth = lineWidth;
+    this.color = color;
 
     this.construct = function(){
-        this.endX = startX + Math.cos(this.rads) * this.magnitude;
-        this.endY = startY + Math.sin(this.rads) * this.magnitude;
-        this.line = new Line(startX, startY, this.endX, this.endY, 2, "black");
+        this.endX = this.startX + Math.cos(this.rads) * this.magnitude;
+        this.endY = this.startY + Math.sin(this.rads) * this.magnitude;
+        this.line = new Line(this.startX, this.startY, this.endX, this.endY, this.lineWidth, this.color);
     }
 
     this.draw = function(){
@@ -55,17 +60,24 @@ function Vector(startX, startY, angle, magnitude){
     this.scale = function(scalar){
         this.magnitude *= scalar;
     }
+
+    this.translate = function(dx, dy){
+        this.startX += dx;
+        this.startY += dy;
+    }
 }
 
-let vector = new Vector(0,0,190,100);
+let vector = new Vector(0,0,190,140,3,"red");
 vector.draw();
-vector.rotate(60);
+vector.rotate(30);
 vector.draw();
-vector.rotate(180);
+vector.translate(100,100);
+vector.scale(.3);
 vector.draw();
-vector.scale(3);
 vector.rotate(-90);
+vector.scale(4);
 vector.draw();
+
 
 function Polygon(sides){
     let polygon;
