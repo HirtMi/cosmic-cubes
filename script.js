@@ -160,6 +160,12 @@ function Polygon(x, y, sides, size){
         this.size *= scale_factor;
         this.construct();
     }
+
+    this.translate = function(dx, dy){
+        this.centerX += dx;
+        this.centerY += dy;
+        this.construct();
+    }
 }
 
 
