@@ -37,23 +37,30 @@ function Vector(startX, startY, angle, magnitude){
     this.rads = (Math.PI / 180) * this.angle;
     this.endX = startX + Math.cos(this.rads) * magnitude;
     this.endY = startY + Math.sin(this.rads) * magnitude;
-    this.line = new Line(startX, startY, this.endX, this.endY, 2, "black");
 
+    this.construct = function(){
+        this.line = new Line(startX, startY, this.endX, this.endY, 2, "black");
+    }
 
     this.draw = function(){
+        this.construct();
         this.line.draw();
     }
 
     this.rotate = function(angle){
-        this.angle += (MATH.PI / 180) * angle;
+        this.rads += (Math.PI / 180) * angle;
+        this.endX = startX + Math.cos(this.rads) * magnitude;
+        this.endY = startY + Math.sin(this.rads) * magnitude;
     }
+
 }
 
-let vector = new Vector(0,0,190,40);
+let vector = new Vector(0,0,190,100);
 vector.draw();
 vector.rotate(60);
 vector.draw();
-
+vector.rotate(180);
+vector.draw();
 
 function Polygon(sides){
     let polygon;
