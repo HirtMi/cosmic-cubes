@@ -6,10 +6,12 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 ctx.setTransform(1,0,0,-1,WIDTH/2, HEIGHT/2);
 
+
 function setStroke(lineWidth, color){
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = color;
 }
+
 
 function Line(startX, startY, endX, endY){
     this.startX = startX;
@@ -65,10 +67,12 @@ function Vector(startX, startY, angle, magnitude){
     }
 }
 
+
 function Point(x, y){
     this.x = x;
     this.y = y;
 }
+
 
 function connectPoints(p1, p2){
     ctx.beginPath();
@@ -124,7 +128,7 @@ function Polygon(x, y, sides, size){
     this.construct = function(){
         this.vectors = [];
         this.points = [];
-        for (let i = 1; i <= sides; i ++){
+        for (let i = 1; i <= sides; i++){
             let vector = new Vector(this.centerX, this.centerY, this.angle * i, this.size);
             vector.construct();
             this.vectors.push(vector);
@@ -152,12 +156,14 @@ function Polygon(x, y, sides, size){
         }
     }
 
-    this.dilate = function(scalar){
-        this.size *= scalar;
+    this.dilate = function(scale_factor){
+        this.size *= scale_factor;
         this.construct();
     }
 }
 
+
+// Testing //
 setStroke(1, "black");
 
 let origin = new Circle(0, 0, 3);
@@ -176,7 +182,7 @@ console.log(polygon.points)
 polygon.draw();
 polygon.dilate(0.3);
 polygon.draw();
-
+// End Testing //
 
 
 
