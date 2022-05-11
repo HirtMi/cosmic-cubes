@@ -79,6 +79,27 @@ vector.scale(4);
 vector.draw();
 
 
-function Polygon(sides){
-    let polygon;
+function Polygon(x, y, sides, size){
+    this.centerX = x;
+    this.centerY = y;
+    this.size = size;
+    this.polygon = [];
+    this.point1 = [this.centerX + x, this.centerY + y];
+
+    this.construct = function(){
+        this.polygon.push(this.point1);
+        for (let i = 1; i < sides; i ++){
+            //apply rotation matrix to previous point to find next point, start with this.point1//
+        }
+    }
+
+    this.draw = function(){
+        //connect points in array//
+    }
 }
+
+//make polygon a list of points, then just have function that connects the points//
+
+
+
+
