@@ -6,21 +6,21 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 ctx.setTransform(1,0,0,-1,WIDTH/2, HEIGHT/2);
 
+function setStroke(lineWidth, color){
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+}
 
-function Line(startX, startY, endX, endY, lineWidth, color){
+function Line(startX, startY, endX, endY){
     this.startX = startX;
     this.startY = startY;
     this.endX = endX;
     this.endY = endY;
-    this.lineWidth = lineWidth;
-    this.color = color
 
     this.draw = function(){
         ctx.beginPath();
         ctx.moveTo(this.startX, this.startY);
         ctx.lineTo(this.endX, this.endY);
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
         ctx.stroke();
     }
 
@@ -33,19 +33,17 @@ function Line(startX, startY, endX, endY, lineWidth, color){
 }
 
 
-function Vector(startX, startY, angle, magnitude, lineWidth, color){
+function Vector(startX, startY, angle, magnitude){
     this.startX = startX;
     this.startY = startY;
     this.angle = angle;
     this.rads = (Math.PI / 180) * this.angle;
     this.magnitude = magnitude;
-    this.lineWidth = lineWidth;
-    this.color = color;
 
     this.construct = function(){
         this.endX = this.startX + Math.cos(this.rads) * this.magnitude;
         this.endY = this.startY + Math.sin(this.rads) * this.magnitude;
-        this.line = new Line(this.startX, this.startY, this.endX, this.endY, this.lineWidth, this.color);
+        this.line = new Line(this.startX, this.startY, this.endX, this.endY);
     }
 
     this.draw = function(){
@@ -80,20 +78,16 @@ function connectPoints(p1, p2){
 }
 
 
-function Circle (x, y, radius, lineWidth, color, expansionSpeed){
+function Circle (x, y, radius, expansionSpeed){
     this.x = x;
     this.y = y;
     this.r = radius;
-    this.lineWidth = lineWidth;
-    this.color = color;
     this.speed = expansionSpeed;
     this.collapse = false;
 
     this.draw = function() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.strokeStyle = this.color
-        ctx.lineWidth = this.lineWidth;
         ctx.stroke();
     }
 
@@ -126,7 +120,6 @@ function Polygon(x, y, sides, size){
     this.centerY = y;
     this.size = size;
     this.angle = 360 / sides;
-
 
     this.construct = function(){
         this.vectors = [];
@@ -165,10 +158,12 @@ function Polygon(x, y, sides, size){
     }
 }
 
-let origin = new Circle(0, 0, 3, 1, "black");
+setStroke(1, "black");
+
+let origin = new Circle(0, 0, 3);
 origin.draw();
 
-let outline = new Circle(0,0,100,1,"black");
+let outline = new Circle(0,0,100);
 outline.draw();
 
 let polygon = new Polygon(0,0,8,100);
@@ -178,7 +173,6 @@ console.log(polygon.points)
 polygon.dilate(2);
 polygon.draw();
 console.log(polygon.points)
-polygon.rotate(35);
 polygon.draw();
 polygon.dilate(0.3);
 polygon.draw();
