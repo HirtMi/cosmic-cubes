@@ -180,7 +180,9 @@ for (let i = 3; i < 12; i++){
 
 // End Testing //
 
-
+function connectPolygons(poly1, poly2){
+    // iterate through each polygons points and connect them using connectPoints function //
+}
 
 
 
