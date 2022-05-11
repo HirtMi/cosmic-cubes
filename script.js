@@ -126,10 +126,11 @@ function Polygon(x, y, sides, size){
     this.centerY = y;
     this.size = size;
     this.angle = 360 / sides;
-    this.vectors = [];
-    this.points = [];
+
 
     this.construct = function(){
+        this.vectors = [];
+        this.points = [];
         for (let i = 1; i <= sides; i ++){
             let vector = new Vector(this.centerX, this.centerY, this.angle * i, this.size);
             vector.construct();
@@ -157,6 +158,11 @@ function Polygon(x, y, sides, size){
             this.points[i].y = this.vectors[i].endY;
         }
     }
+
+    this.dilate = function(scalar){
+        this.size *= scalar;
+        this.construct();
+    }
 }
 
 let origin = new Circle(0, 0, 3, 1, "black");
@@ -167,6 +173,14 @@ outline.draw();
 
 let polygon = new Polygon(0,0,8,100);
 polygon.construct();
+polygon.draw();
+console.log(polygon.points)
+polygon.dilate(2);
+polygon.draw();
+console.log(polygon.points)
+polygon.rotate(35);
+polygon.draw();
+polygon.dilate(0.3);
 polygon.draw();
 
 
