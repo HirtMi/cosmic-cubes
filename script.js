@@ -67,18 +67,21 @@ function Vector(startX, startY, angle, magnitude, lineWidth, color){
     }
 }
 
-let vector = new Vector(0,0,190,140,3,"red");
-vector.draw();
-vector.rotate(30);
-vector.draw();
-vector.translate(100,100);
-vector.scale(.3);
-vector.draw();
-vector.rotate(-90);
-vector.scale(4);
-vector.draw();
+function Point(x, y){
+    this.x = x;
+    this.y = y;
+}
 
+function connectPoints(p1, p2){
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+}
 
+let point1 = new Point(100,100);
+let point2 = new Point(200,200);
+connectPoints(point1, point2);
 function Polygon(x, y, sides, size){
     this.centerX = x;
     this.centerY = y;
