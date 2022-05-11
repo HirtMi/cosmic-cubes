@@ -84,10 +84,12 @@ function Polygon(x, y, sides, size){
     this.centerY = y;
     this.size = size;
     this.polygon = [];
-    this.point1 = [this.centerX + x, this.centerY + y];
+
+    //maybe use vectors to find points?//
+    //dont draw vectors, but the end points of the lines you can push to polygon array//
+    //first point could be straight up, then you can rotate all points after construction for cases like square//
 
     this.construct = function(){
-        this.polygon.push(this.point1);
         for (let i = 1; i < sides; i ++){
             //apply rotation matrix to previous point to find next point, start with this.point1//
         }
@@ -103,3 +105,16 @@ function Polygon(x, y, sides, size){
 
 
 
+
+
+
+
+
+
+
+
+
+
+function Polyhedron(){
+
+}
