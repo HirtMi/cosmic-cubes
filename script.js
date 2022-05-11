@@ -103,12 +103,9 @@ function Circle (x, y, radius, expansionSpeed){
         this.r -= this.speed;
     }
 
-    this.moveX = function(dx){
+    this.translate = function(dx, dy){
         this.x += dx;
-    }
-
-    this.moveY = function(dy){
-        this.y -= dy;
+        this.y += dy;
     }
 
     this.randomizeColor = function(probability){
