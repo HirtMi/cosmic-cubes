@@ -7,9 +7,10 @@ canvas.height = HEIGHT;
 ctx.setTransform(1,0,0,-1,WIDTH/2, HEIGHT/2);
 
 
-function setStroke(lineWidth, color){
+function setStroke(lineWidth, color, opacity){
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = color;
+    ctx.globalAlpha = opacity;
 }
 
 
@@ -299,7 +300,7 @@ function Cube(x, y, z, size){
 
 
 // ----------------- Testing --------------------- //
-// setStroke(1, "black");
+setStroke(1, "black", 0.5);
 
 // let origin = new Circle(0, 0, 3);
 // origin.draw();
