@@ -69,6 +69,8 @@ function Vector(origin, angle, magnitude, depthAngle){
     }
 
     this.rotate = function(angle, depthAngle){
+        this.angle += angle;
+        this.depthAngle += depthAngle;
         this.rads += (Math.PI / 180) * angle;
         this.depthRads += (Math.PI / 180) * depthAngle;
     }
@@ -83,12 +85,6 @@ function Vector(origin, angle, magnitude, depthAngle){
         this.startZ += dz;
     }
 }
-
-let v = new Vector(new Point(0,0,0), 120, 100, 120);
-
-
-
-
 
 
 function connectPoints(p1, p2){
@@ -212,47 +208,95 @@ function connectPolygons(poly1, poly2){
 
 
 
+// function Cube(x, y, z, size){
+//     this.center = new Point(x,y,z);
+//     this.dist = size / 2;
+//     this.vertices = [
+//         new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
+//         new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
+//         new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z - this.dist),
+//         new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z + this.dist),
+//         new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z + this.dist),
+//         new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z - this.dist),
+//         new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z - this.dist),
+//         new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z + this.dist)];
+    
+//     this.faces = [
+//         [this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
+//         [this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
+//         [this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
+//         [this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
+//         [this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
+//         [this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]]];
+    
+//     this.drawFrame = function(){
+//         for (let i = 0; i < this.faces.length; i++){
+//             for (let j = 0; j < this.faces[i].length - 1; j++){
+//                 connectPoints(this.faces[i][j], this.faces[i][j+1]);
+//             }
+//             connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
+//         }
+//     }
+
+//     this.rotate = function(x, y, z){
+//         radX = (Math.PI / 180) * x;
+//         radY = (Math.PI / 180) * y;
+//         radZ = (Math.PI / 180) * z;
+
+
+//     }
+// }
+
+// let cube = new Cube(0,0,0,100);
+// cube.drawFrame();
+
+
+
+
+
 function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
-    this.vertices = [
-        new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
-        new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
-        new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z - this.dist),
-        new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z + this.dist),
-        new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z + this.dist),
-        new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z - this.dist),
-        new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z - this.dist),
-        new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z + this.dist)];
-    
-    this.faces = [
-        [this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
-        [this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
-        [this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
-        [this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
-        [this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
-        [this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]]];
-    
-    this.drawFrame = function(){
-        for (let i = 0; i < this.faces.length; i++){
-            for (let j = 0; j < this.faces[i].length - 1; j++){
-                connectPoints(this.faces[i][j], this.faces[i][j+1]);
-            }
-            connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
+    this.vertexVectors = [
+        new Vector(this.center, 45, size, -109.5),
+        new Vector(this.center, 135, size, -109.5),
+        new Vector(this.center, 225, size, -109.5),
+        new Vector(this.center, 315, size, -109.5),
+        new Vector(this.center, 45, size, 109.5),
+        new Vector(this.center, 135, size, 109.5),
+        new Vector(this.center, 225, size, 109.5),
+        new Vector(this.center, 315, size, 109.5)];
+
+    this.construct = function(){
+        this.vertices = [];
+        for (let i = 0; i < 8; i++){
+            this.vertexVectors[i].construct();
+            this.vertices.push(new Point(this.vertexVectors[i].endX, this.vertexVectors[i].endY, this.vertexVectors[i].endZ));
         }
     }
+        
+    this.drawFrame = function(){
+        for (let i = 0; i < 7; i++){
+            connectPoints(this.vertices[i], this.vertices[i+1]);
+            }
+        }
 
-    this.rotate = function(x, y, z){
-        radX = (Math.PI / 180) * x;
-        radY = (Math.PI / 180) * y;
-        radZ = (Math.PI / 180) * z;
-
-
+    this.rotate = function(angle, depthAngle){
+        for (let i = 0; i < 8; i++){
+            this.vertexVectors[i].rotate(angle, depthAngle);
+        }
+        this.construct();
     }
 }
 
 let cube = new Cube(0,0,0,100);
-// cube.drawFrame();
+cube.construct();
+cube.drawFrame();
+console.log(cube.vertexVectors);
+cube.rotate(123,50);
+cube.construct();
+cube.drawFrame();
+console.log(cube.vertexVectors);
 
 
 
