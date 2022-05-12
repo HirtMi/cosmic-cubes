@@ -178,8 +178,8 @@ function connectPolygons(poly1, poly2){
 }
 
 
-// Axes are: X - left and right, Y - up and down, Z - front and back //
-// 'angle' is regular rotation in 2D (around Z-axis). 'depthAngle' is rotation front and back, around X-axis. Only need these 2 angles to construct vector in 3D space//
+// Axes: X - left/right, Y - up/down, Z - front/back //
+// 'angle' is regular rotation in 2D (around Z-axis). 'depthAngle' is rotation front and back, around X-axis. Only need these 2 angles to construct vector in 3D space //
 // 'radsY' is introduced for rotation around Y axis //
 function Vector3D(origin, angle, depthAngle, magnitude){
     this.startX = origin.x;
@@ -207,7 +207,8 @@ function Vector3D(origin, angle, depthAngle, magnitude){
         this.radsZ = (Math.PI / 180) * angleZ;
         this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ));
         this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ));
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        this.endPoint.x = this.endX;
+        this.endPoint.y = this.endY;
         console.log(this.endPoint);
     }
     
@@ -215,7 +216,8 @@ function Vector3D(origin, angle, depthAngle, magnitude){
         this.radsX = (Math.PI / 180) * angleX;
         this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX));
         this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX));
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        this.endPoint.y = this.endY;
+        this.endPoint.z = this.endZ;
         console.log(this.endPoint);
     }
     
@@ -223,7 +225,8 @@ function Vector3D(origin, angle, depthAngle, magnitude){
         this.radsY = (Math.PI / 180) * angleY;
         this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY));
         this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY));
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        this.endPoint.x = this.endX;
+        this.endPoint.z = this.endZ;
         console.log(this.endPoint);
     }
 
