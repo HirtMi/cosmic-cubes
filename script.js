@@ -225,6 +225,14 @@ function Cube(x, y, z, size){
             connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
         }
     }
+
+    this.rotate = function(x, y, z){
+        radX = (Math.PI / 180) * x;
+        radY = (Math.PI / 180) * y;
+        radZ = (Math.PI / 180) * z;
+
+
+    }
 }
 
 let cube = new Cube(0,0,0,100);
