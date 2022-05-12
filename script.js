@@ -46,18 +46,20 @@ function Line(p1, p2){
 }
 
 
-function Vector(origin, angle, magnitude){
+function Vector(origin, angle, magnitude, depthAngle){
     this.startX = origin.x;
     this.startY = origin.y;
     this.startZ = origin.z;
     this.angle = angle;
+    this.depthAngle = depthAngle;
     this.rads = (Math.PI / 180) * this.angle;
+    this.depthRads = (Math.PI / 180) * this.depthAngle;
     this.magnitude = magnitude;
 
     this.construct = function(){
         this.endX = this.startX + Math.cos(this.rads) * this.magnitude;
         this.endY = this.startY + Math.sin(this.rads) * this.magnitude;
-        this.endZ = this.startZ + Math.sin(this.rads) * this.magnitude;
+        this.endZ = this.startZ + Math.cos(this.depthRads) * this.magnitude;
         this.line = new Line(new Point(this.startX, this.startY, this.startZ), new Point(this.endX, this.endY, this.endZ));
     }
 
@@ -66,8 +68,9 @@ function Vector(origin, angle, magnitude){
         this.line.draw();
     }
 
-    this.rotate = function(angle){
+    this.rotate = function(angle, depthAngle){
         this.rads += (Math.PI / 180) * angle;
+        this.depthRads += (Math.PI / 180) * depthAngle;
     }
 
     this.scale = function(scalar){
@@ -81,6 +84,8 @@ function Vector(origin, angle, magnitude){
     }
 }
 
+let v = new Vector(new Point(0,0,0), 120, 100, 120);
+
 
 
 
@@ -88,8 +93,8 @@ function Vector(origin, angle, magnitude){
 
 function connectPoints(p1, p2){
     ctx.beginPath();
-    ctx.moveTo(p1.x, p1.y);
-    ctx.lineTo(p2.x, p2.y);
+    ctx.moveTo(p1.x, p1.y, p1.z);
+    ctx.lineTo(p2.x, p2.y, p2.z);
     ctx.stroke();
 }
 
@@ -138,7 +143,7 @@ function Polygon(x, y, sides, size){
         this.vectors = [];
         this.points = [];
         for (let i = 1; i <= sides; i++){
-            let vector = new Vector(this.centerX, this.centerY, this.angle * i, this.size);
+            let vector = new Vector(new Point(0,0,0), this.angle * i, this.size);
             vector.construct();
             this.vectors.push(vector);
             let point = new Point(vector.endX, vector.endY);
@@ -189,7 +194,7 @@ function connectPolygons(poly1, poly2){
 
 
 // Testing //
-setStroke(1, "black");
+// setStroke(1, "black");
 
 // let origin = new Circle(0, 0, 3);
 // origin.draw();
