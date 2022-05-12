@@ -317,7 +317,7 @@ setStroke(1, "black", 0.5);
 //     polygon.draw();
 // }
 
-let cube = new Cube(0,0,0,555);
+let cube = new Cube(0,0,0,100);
 cube.construct();
 cube.drawFrame();
 
@@ -336,8 +336,8 @@ function animate(){
 
     cube.drawFrame();
     cube.rotateZ(1);
-    cube.rotateX(1);
-    cube.rotateY(1);
+    cube.rotateX(-1);
+    cube.rotateY(-1);
 }
 animate();
 // ------------------- End Testing ----------------- //
@@ -347,3 +347,7 @@ animate();
 // 1. rotation causes vector to shrink over time //
 // 2. cube is not a cube //
 // 3. vector scaling doesn't work anymore //
+
+
+// could make vector function of 2 points, rather than doing angles and magnitude //
+// or have 2 forms of vector, one for angle, magnitude, and one for 2 points //
