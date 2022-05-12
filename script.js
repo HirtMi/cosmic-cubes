@@ -280,7 +280,13 @@ function Cube(x, y, z, size){
             connectPoints(this.faces[i][0].endPoint, this.faces[i][3].endPoint);
             }
         }
-       
+
+    this.connectVerticesToOrigin = function(){
+        for (let i = 0; i < 8; i++){
+            connectPoints(this.vertexVectors[i].endPoint, this.center);
+        }
+    }
+
     this.rotateX = function(angle){
         for (let i = 0; i < 8; i++){
             this.vertexVectors[i].rotateX(angle);
@@ -333,7 +339,7 @@ function animate(){
     // v.rotateX(1);
     // v.rotateZ(1);
     // v.rotateY(1);
-
+    // cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.rotateZ(1);
     cube.rotateX(-1);
