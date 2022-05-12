@@ -18,6 +18,25 @@ function Point(x, y, z){
     this.x = x;
     this.y = y;
     this.z = z;
+
+    this.rotateZ = function(angleZ){
+        this.radsZ = (Math.PI / 180) * angleZ;
+        this.x = (this.x * Math.cos(this.radsZ) - this.y * Math.sin(this.radsZ));
+        this.y = (this.x * Math.sin(this.radsZ) + this.y * Math.cos(this.radsZ));
+    }
+    
+    this.rotateX = function(angleX){
+        this.radsX = (Math.PI / 180) * angleX;
+        this.y = (this.y * Math.cos(this.radsX) - this.z * Math.sin(this.radsX));
+        this.z = (this.y * Math.sin(this.radsX) + this.z * Math.cos(this.radsX));
+        console.log(this.endPoint);
+    }
+    
+    this.rotateY = function(angleY){
+        this.radsY = (Math.PI / 180) * angleY;
+        this.x = (this.x * Math.cos(this.radsY) + this.z * Math.sin(this.radsY));
+        this.z = (-1 * this.x * Math.sin(this.radsY) + this.z * Math.cos(this.radsY));
+    }
 }
 
 
@@ -178,10 +197,11 @@ function connectPolygons(poly1, poly2){
 }
 
 
+// this might be outdated and/or useless. consider deleting //
 // Axes: X - left/right, Y - up/down, Z - front/back //
 // 'angle' is regular rotation in 2D (around Z-axis). 'depthAngle' is rotation front and back, around X-axis. Only need these 2 angles to construct vector in 3D space //
 // 'radsY' is introduced for rotation around Y axis //
-function Vector3D(origin, angle, depthAngle, magnitude){
+function Vector3D(origin, endPoint, angle, depthAngle, magnitude){
     this.startX = origin.x;
     this.startY = origin.y;
     this.startZ = origin.z;
@@ -189,6 +209,8 @@ function Vector3D(origin, angle, depthAngle, magnitude){
     this.radsX = (Math.PI / 180) * depthAngle;
     this.radsY;
     this.magnitude = magnitude;
+    this.endPoint = endPoint;
+    this.line = new Line(new Point(this.startX, this.startY, this.startZ), this.endPoint);
 
     this.construct = function(){
         this.endX = this.startX + (Math.cos(this.radsX) * Math.sin(this.radsZ) * this.magnitude);
@@ -246,62 +268,59 @@ function Vector3D(origin, angle, depthAngle, magnitude){
 function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
-    this.vertexVectors = [
-        new Vector3D(this.center, 45, size, -109.5),
-        new Vector3D(this.center, 135, size, -109.5),
-        new Vector3D(this.center, 225, size, -109.5),
-        new Vector3D(this.center, 315, size, -109.5),
-        new Vector3D(this.center, 45, size, 109.5),
-        new Vector3D(this.center, 135, size, 109.5),
-        new Vector3D(this.center, 225, size, 109.5),
-        new Vector3D(this.center, 315, size, 109.5)];
+
+    this.vertices = [
+        new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
+        new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
+        new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z - this.dist),
+        new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z + this.dist),
+        new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z + this.dist),
+        new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z - this.dist),
+        new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z - this.dist),
+        new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z + this.dist)
+    ];
+
     
     this.faces = [
-        [this.vertexVectors[0], this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[3]],
-        [this.vertexVectors[4], this.vertexVectors[5], this.vertexVectors[6], this.vertexVectors[7]],
-        [this.vertexVectors[2], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[4]],
-        [this.vertexVectors[1], this.vertexVectors[0], this.vertexVectors[6], this.vertexVectors[7]],
-        [this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[4], this.vertexVectors[7]],
-        [this.vertexVectors[0], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[6]]];
+        [this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
+        [this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
+        [this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
+        [this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
+        [this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
+        [this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]]
+    ];
 
-    this.construct = function(){
-        this.vertices = [];
-        for (let i = 0; i < 8; i++){
-            this.vertexVectors[i].construct();
-            this.vertices.push(new Point(this.vertexVectors[i].endX, this.vertexVectors[i].endY, this.vertexVectors[i].endZ));
-        }
-    }
         
     this.drawFrame = function(){
-        for (let i = 0; i < 6; i++){
+        for (let i = 0; i < this.faces.length; i++){
             for (let j = 0; j < 3; j++){
-                connectPoints(this.faces[i][j].endPoint, this.faces[i][j+1].endPoint);
+                connectPoints(this.faces[i][j], this.faces[i][j+1]);
                 }
-            connectPoints(this.faces[i][0].endPoint, this.faces[i][3].endPoint);
+            connectPoints(this.faces[i][0], this.faces[i][3]);
             }
         }
 
     this.connectVerticesToOrigin = function(){
         for (let i = 0; i < 8; i++){
-            connectPoints(this.vertexVectors[i].endPoint, this.center);
+            connectPoints(this.vertices[i], this.center);
         }
     }
 
     this.rotateX = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertexVectors[i].rotateX(angle);
+            this.vertices[i].rotateX(angle);
         }
     }
 
     this.rotateY = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertexVectors[i].rotateY(angle);
+            this.vertices[i].rotateY(angle);
         }
     }
 
     this.rotateZ = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertexVectors[i].rotateZ(angle);
+            this.vertices[i].rotateZ(angle);
         }
     }
 }
@@ -324,21 +343,15 @@ setStroke(1, "black", 0.5);
 // }
 
 let cube = new Cube(0,0,0,100);
-cube.construct();
-cube.drawFrame();
 
-let v = new Vector3D(new Point(0,0,0), 0,0,100);
-v.construct();
+
 const fps = 1000;
 function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    // v.draw();
-    // v.rotateX(1);
-    // v.rotateZ(1);
-    // v.rotateY(1);
+
     // cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.rotateZ(1);
