@@ -68,9 +68,10 @@ function Vector(startX, startY, angle, magnitude){
 }
 
 
-function Point(x, y){
+function Point(x, y, z){
     this.x = x;
     this.y = y;
+    this.z = z;
 }
 
 
@@ -179,25 +180,55 @@ function connectPolygons(poly1, poly2){
 // Testing //
 setStroke(1, "black");
 
-let origin = new Circle(0, 0, 3);
-origin.draw();
+// let origin = new Circle(0, 0, 3);
+// origin.draw();
 
-let outline = new Circle(0,0,20*11);
-outline.draw();
+// let outline = new Circle(0,0,20*11);
+// outline.draw();
 
-for (let i = 3; i < 12; i++){
-    let polygon = new Polygon(0,0,i,20*i);
-    polygon.construct();
-    polygon.draw();
-}
+// for (let i = 3; i < 12; i++){
+//     let polygon = new Polygon(0,0,i,20*i);
+//     polygon.construct();
+//     polygon.draw();
+// }
 
 // End Testing //
 
 
 
+function Cube(x, y, z, size){
+    this.center = new Point(x,y,z);
+    this.dist = size / 2;
+    this.vertices = [
+        new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
+        new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
+        new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z - this.dist),
+        new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z + this.dist),
+        new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z + this.dist),
+        new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z - this.dist),
+        new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z - this.dist),
+        new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z + this.dist)];
+    
+    this.faces = [
+        [this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
+        [this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
+        [this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
+        [this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
+        [this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
+        [this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]]];
+    
+    this.drawFrame = function(){
+        for (let i = 0; i < this.faces.length; i++){
+            for (let j = 0; j < this.faces[i].length - 1; j++){
+                connectPoints(this.faces[i][j], this.faces[i][j+1]);
+            }
+            connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
+        }
+    }
+}
 
-
-
+let cube = new Cube(0,0,0,100);
+cube.drawFrame();
 
 
 
