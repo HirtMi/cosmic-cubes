@@ -20,6 +20,14 @@ function Point(x, y, z){
 }
 
 
+function connectPoints(p1, p2){
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y, p1.z);
+    ctx.lineTo(p2.x, p2.y, p2.z);
+    ctx.stroke();
+}
+
+
 function Line(p1, p2){
     this.p1 = p1;
     this.p2 = p2;
@@ -75,77 +83,6 @@ function Vector2D(startX, startY, angle, magnitude){
 }
 
 
-// Axes are: X - left and right, Y - up and down, Z - front and back //
-// angle is rotating in 2D, around Z-axis. depthAngle is rotating front and back, around X-axis. Only need these 2 angles to define vector in 3D space//
-// angleY and radsY is introduced for rotating around Y axis //
-function Vector3D(origin, angle, depthAngle, magnitude){
-    this.startX = origin.x;
-    this.startY = origin.y;
-    this.startZ = origin.z;
-    this.radsZ = (Math.PI / 180) * angle;
-    this.radsX = (Math.PI / 180) * depthAngle;
-    this.radsY;
-    this.magnitude = magnitude;
-
-    this.construct = function(){
-        this.endX = this.startX + (Math.cos(this.radsX) * Math.sin(this.radsZ) * this.magnitude);
-        this.endY = this.startY + (Math.cos(this.radsX) * Math.cos(this.radsZ) * this.magnitude);
-        this.endZ = this.startZ + Math.sin(this.radsX) * this.magnitude;
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
-        this.line = new Line(new Point(this.startX, this.startY, this.startZ), this.endPoint);
-    }
-
-    this.draw = function(){
-        this.line.p2 = this.endPoint;
-        this.line.draw();
-    }
-
-    this.rotateZ = function(angleZ){
-        this.radsZ = (Math.PI / 180) * angleZ;
-        this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ));
-        this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ));
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
-        console.log(this.endPoint);
-    }
-    
-    this.rotateX = function(angleX){
-        this.radsX = (Math.PI / 180) * angleX;
-        this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX));
-        this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX));
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
-        console.log(this.endPoint);
-        
-    }
-    
-    this.rotateY = function(angleY){
-        this.radsY = (Math.PI / 180) * angleY;
-        this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY));
-        this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY));
-        this.endPoint = new Point(this.endX, this.endY, this.endZ);
-        console.log(this.endPoint);
-    }
-
-    // no longer functional. remake function. will have to calculate new distance from starting point //
-    this.scale = function(scalar){
-        this.magnitude *= scalar;
-    }
-
-    this.translate = function(dx, dy, dz){
-        this.startXs += dx;
-        this.startY += dy;
-        this.startZ += dz;
-    }
-}
-
-
-function connectPoints(p1, p2){
-    ctx.beginPath();
-    ctx.moveTo(p1.x, p1.y, p1.z);
-    ctx.lineTo(p2.x, p2.y, p2.z);
-    ctx.stroke();
-}
-
-
 function Circle (x, y, radius, expansionSpeed){
     this.x = x;
     this.y = y;
@@ -178,7 +115,6 @@ function Circle (x, y, radius, expansionSpeed){
         }
     }
 }
-
 
 
 function Polygon(x, y, sides, size){
@@ -241,18 +177,80 @@ function connectPolygons(poly1, poly2){
 }
 
 
+// Axes are: X - left and right, Y - up and down, Z - front and back //
+// 'angle' is regular rotation in 2D (around Z-axis). 'depthAngle' is rotation front and back, around X-axis. Only need these 2 angles to construct vector in 3D space//
+// 'radsY' is introduced for rotation around Y axis //
+function Vector3D(origin, angle, depthAngle, magnitude){
+    this.startX = origin.x;
+    this.startY = origin.y;
+    this.startZ = origin.z;
+    this.radsZ = (Math.PI / 180) * angle;
+    this.radsX = (Math.PI / 180) * depthAngle;
+    this.radsY;
+    this.magnitude = magnitude;
+
+    this.construct = function(){
+        this.endX = this.startX + (Math.cos(this.radsX) * Math.sin(this.radsZ) * this.magnitude);
+        this.endY = this.startY + (Math.cos(this.radsX) * Math.cos(this.radsZ) * this.magnitude);
+        this.endZ = this.startZ + Math.sin(this.radsX) * this.magnitude;
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        this.line = new Line(new Point(this.startX, this.startY, this.startZ), this.endPoint);
+    }
+
+    this.draw = function(){
+        this.line.p2 = this.endPoint;
+        this.line.draw();
+    }
+
+    this.rotateZ = function(angleZ){
+        this.radsZ = (Math.PI / 180) * angleZ;
+        this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ));
+        this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ));
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        console.log(this.endPoint);
+    }
+    
+    this.rotateX = function(angleX){
+        this.radsX = (Math.PI / 180) * angleX;
+        this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX));
+        this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX));
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        console.log(this.endPoint);
+    }
+    
+    this.rotateY = function(angleY){
+        this.radsY = (Math.PI / 180) * angleY;
+        this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY));
+        this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY));
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+        console.log(this.endPoint);
+    }
+
+    // no longer functional. remake function. will have to calculate new distance from starting point //
+    this.scale = function(scalar){
+        this.magnitude *= scalar;
+    }
+
+    this.translate = function(dx, dy, dz){
+        this.startXs += dx;
+        this.startY += dy;
+        this.startZ += dz;
+    }
+}
+
+
 function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
     this.vertexVectors = [
-        new Vector3D(this.center, 45, size*2, -109.5),
-        new Vector3D(this.center, 135, size*2, -109.5),
-        new Vector3D(this.center, 225, size*2, -109.5),
-        new Vector3D(this.center, 315, size*2, -109.5),
-        new Vector3D(this.center, 45, size*2, 109.5),
-        new Vector3D(this.center, 135, size*2, 109.5),
-        new Vector3D(this.center, 225, size*2, 109.5),
-        new Vector3D(this.center, 315, size*2, 109.5)];
+        new Vector3D(this.center, 45, size, -109.5),
+        new Vector3D(this.center, 135, size, -109.5),
+        new Vector3D(this.center, 225, size, -109.5),
+        new Vector3D(this.center, 315, size, -109.5),
+        new Vector3D(this.center, 45, size, 109.5),
+        new Vector3D(this.center, 135, size, 109.5),
+        new Vector3D(this.center, 225, size, 109.5),
+        new Vector3D(this.center, 315, size, 109.5)];
     
     this.faces = [
         [this.vertexVectors[0], this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[3]],
@@ -260,8 +258,7 @@ function Cube(x, y, z, size){
         [this.vertexVectors[2], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[4]],
         [this.vertexVectors[1], this.vertexVectors[0], this.vertexVectors[6], this.vertexVectors[7]],
         [this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[4], this.vertexVectors[7]],
-        [this.vertexVectors[0], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[6]]
-        ]
+        [this.vertexVectors[0], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[6]]];
 
     this.construct = function(){
         this.vertices = [];
@@ -280,17 +277,18 @@ function Cube(x, y, z, size){
             }
         }
        
-
     this.rotateX = function(angle){
         for (let i = 0; i < 8; i++){
             this.vertexVectors[i].rotateX(angle);
         }
     }
+
     this.rotateY = function(angle){
         for (let i = 0; i < 8; i++){
             this.vertexVectors[i].rotateY(angle);
         }
     }
+
     this.rotateZ = function(angle){
         for (let i = 0; i < 8; i++){
             this.vertexVectors[i].rotateZ(angle);
@@ -300,7 +298,7 @@ function Cube(x, y, z, size){
 
 
 
-// Testing //
+// ----------------- Testing --------------------- //
 // setStroke(1, "black");
 
 // let origin = new Circle(0, 0, 3);
@@ -315,15 +313,12 @@ function Cube(x, y, z, size){
 //     polygon.draw();
 // }
 
-let cube = new Cube(0,0,0,200);
+let cube = new Cube(0,0,0,555);
 cube.construct();
 cube.drawFrame();
 
 let v = new Vector3D(new Point(0,0,0), 0,0,100);
 v.construct();
-
-let rot1 = 2;
-let rot2 = 0;
 const fps = 1000;
 function animate(){
     setTimeout(() => {
@@ -331,9 +326,9 @@ function animate(){
     }, 1000 / fps);
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     // v.draw();
-    // v.rotateX(rot1);
-    // v.rotateZ(rot1);
-    // v.rotateY(rot1);
+    // v.rotateX(1);
+    // v.rotateZ(1);
+    // v.rotateY(1);
 
     cube.drawFrame();
     cube.rotateZ(1);
@@ -341,7 +336,7 @@ function animate(){
     cube.rotateY(1);
 }
 animate();
-// End Testing //
+// ------------------- End Testing ----------------- //
 
 
 // ------------ BUGS ----------- //
