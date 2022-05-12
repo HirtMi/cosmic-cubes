@@ -57,9 +57,10 @@ function Vector(origin, angle, magnitude, depthAngle){
     this.magnitude = magnitude;
 
     this.construct = function(){
-        this.endX = this.startX + Math.cos(this.rads) * this.magnitude;
-        this.endY = this.startY + Math.sin(this.rads) * this.magnitude;
-        this.endZ = this.startZ + Math.cos(this.depthRads) * this.magnitude;
+        this.endX = this.startX + (Math.cos(this.depthRads) * Math.sin(this.rads) * this.magnitude);
+        this.endY = this.startY + (Math.cos(this.depthRads) * Math.cos(this.rads) * this.magnitude);
+        this.endZ = this.startZ + Math.sin(this.depthRads) * this.magnitude;
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
         this.line = new Line(new Point(this.startX, this.startY, this.startZ), new Point(this.endX, this.endY, this.endZ));
     }
 
@@ -266,6 +267,15 @@ function Cube(x, y, z, size){
         new Vector(this.center, 135, size, 109.5),
         new Vector(this.center, 225, size, 109.5),
         new Vector(this.center, 315, size, 109.5)];
+    
+    this.faces = [
+        [this.vertexVectors[0], this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[3]],
+        [this.vertexVectors[4], this.vertexVectors[5], this.vertexVectors[6], this.vertexVectors[7]],
+        [this.vertexVectors[2], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[4]],
+        [this.vertexVectors[1], this.vertexVectors[0], this.vertexVectors[6], this.vertexVectors[7]],
+        [this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[4], this.vertexVectors[7]],
+        [this.vertexVectors[0], this.vertexVectors[3], this.vertexVectors[5], this.vertexVectors[6]]
+        ]
 
     this.construct = function(){
         this.vertices = [];
@@ -276,10 +286,14 @@ function Cube(x, y, z, size){
     }
         
     this.drawFrame = function(){
-        for (let i = 0; i < 7; i++){
-            connectPoints(this.vertices[i], this.vertices[i+1]);
+        for (let i = 0; i < 6; i++){
+            for (let j = 0; j < 3; j++){
+                connectPoints(this.faces[i][j].endPoint, this.faces[i][j+1].endPoint);
+                }
+            connectPoints(this.faces[i][0].endPoint, this.faces[i][3].endPoint);
             }
         }
+       
 
     this.rotate = function(angle, depthAngle){
         for (let i = 0; i < 8; i++){
@@ -289,17 +303,28 @@ function Cube(x, y, z, size){
     }
 }
 
-let cube = new Cube(0,0,0,100);
+let cube = new Cube(0,0,0,200);
 cube.construct();
 cube.drawFrame();
-console.log(cube.vertices);
-cube.rotate(123,50);
-cube.construct();
-cube.drawFrame();
-console.log(cube.vertices);
 
-//TODO: fix rotation in 3D somehow. good luck. //
 
+
+// let rot1 = 0;
+// let rot2 = 0;
+// const fps = 1;
+// function animate(){
+//     setTimeout(() => {
+//         requestAnimationFrame(animate);
+//     }, 1000 / fps);
+//     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+
+//     cube.construct();
+//     cube.drawFrame();
+//     cube.rotate(rot1,rot2);
+//     rot1++;
+//     rot2++;
+// }
+// animate();
 
 
 function Polyhedron(){
