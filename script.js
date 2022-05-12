@@ -21,27 +21,23 @@ function Point(x, y, z){
 
 
 function Line(p1, p2){
-    this.startX = p1.x;
-    this.startY = p1.y;
-    this.startZ = p1.z;
-    this.endX = p2.x;
-    this.endY = p2.y;
-    this.endZ = p2.z;
+    this.p1 = p1;
+    this.p2 = p2;
 
     this.draw = function(){
         ctx.beginPath();
-        ctx.moveTo(this.startX, this.startY, this.startZ);
-        ctx.lineTo(this.endX, this.endY, this.endZ);
+        ctx.moveTo(this.p1.x, this.p1.y, this.p1.z);
+        ctx.lineTo(this.p2.x, this.p2.y, this.p2.z);
         ctx.stroke();
     }
 
     this.translate = function(dx, dy, dz){
-        this.startX += dx;
-        this.startY += dy;
-        this.startZ += dz;
-        this.endX += dx;
-        this.endY += dy;
-        this.endZ += dz;
+        this.p1.x += dx;
+        this.p1.y += dy;
+        this.p1.z += dz;
+        this.p2.x += dx;
+        this.p2.y += dy;
+        this.p2.z += dz;
     }
 }
 
@@ -66,28 +62,29 @@ function Vector(origin, angle, depthAngle, magnitude){
     }
 
     this.draw = function(){
-        this.construct();
+        this.line.p2 = this.endPoint;
         this.line.draw();
     }
 
     this.rotateZ = function(angleZ){
-        this.radsZ += (Math.PI / 180) * angleZ;
-        this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ)) * magnitude;
-        this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ)) * magnitude;
+        this.radsZ = (Math.PI / 180) * angleZ;
+        this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ));
+        this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ));
         this.endPoint = new Point(this.endX, this.endY, this.endZ);
     }
 
     this.rotateX = function(angleX){
-        this.radsX += (Math.PI / 180) * angleX;
-        this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX)) * magnitude;
-        this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX)) * magnitude;
+        this.radsX = (Math.PI / 180) * angleX;
+        this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX));
+        this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX));
         this.endPoint = new Point(this.endX, this.endY, this.endZ);
+
     }
 
     this.rotateY = function(angleY){
-        this.radsY += (Math.PI / 180) * angleY;
-        this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY)) * magnitude;
-        this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY)) * magnitude;
+        this.radsY = (Math.PI / 180) * angleY;
+        this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY));
+        this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY));
         this.endPoint = new Point(this.endX, this.endY, this.endZ);
     }
 
@@ -311,19 +308,28 @@ function Cube(x, y, z, size){
         }
        
 
-    this.rotate = function(angle, depthAngle){
+    this.rotateX = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertexVectors[i].rotate(angle, depthAngle);
+            this.vertexVectors[i].rotateX(angle);
         }
-        this.construct();
+    }
+    this.rotateY = function(angle){
+        for (let i = 0; i < 8; i++){
+            this.vertexVectors[i].rotateY(angle);
+        }
+    }
+    this.rotateZ = function(angle){
+        for (let i = 0; i < 8; i++){
+            this.vertexVectors[i].rotateZ(angle);
+        }
     }
 }
 
-// let cube = new Cube(0,0,0,200);
-// cube.construct();
-// cube.drawFrame();
+let cube = new Cube(0,0,0,200);
+cube.construct();
+cube.drawFrame();
 
-let v = new Vector(new Point(0,0,0), 120, 0, 200);
+let v = new Vector(new Point(0,0,0), 0,0,100);
 v.construct();
 
 let rot1 = 2;
@@ -334,16 +340,22 @@ function animate(){
         requestAnimationFrame(animate);
     }, 1000 / fps);
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    v.draw();
-    v.rotateX(rot1);
-    v.rotateZ(rot1);
+    // v.draw();
+    // v.rotateX(rot1);
+    // v.rotateZ(rot1);
     // v.rotateY(rot1);
+    // v.scale(2);
+    // console.log(v);
+    cube.drawFrame();
+    cube.rotateZ(1);
+    cube.rotateX(1);
+    cube.rotateY(1);
 }
 animate();
 
 //rotateY doesnt work//
 
 
-function Polyhedron(){
+// function Polyhedron(){
 
-}
+// }
