@@ -13,31 +13,43 @@ function setStroke(lineWidth, color){
 }
 
 
-function Line(startX, startY, endX, endY){
-    this.startX = startX;
-    this.startY = startY;
-    this.endX = endX;
-    this.endY = endY;
+function Point(x, y, z){
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+
+
+function Line(p1, p2){
+    this.startX = p1.x;
+    this.startY = p1.y;
+    this.startZ = p1.z;
+    this.endX = p2.x;
+    this.endY = p2.y;
+    this.endZ = p2.z;
 
     this.draw = function(){
         ctx.beginPath();
-        ctx.moveTo(this.startX, this.startY);
-        ctx.lineTo(this.endX, this.endY);
+        ctx.moveTo(this.startX, this.startY, this.startZ);
+        ctx.lineTo(this.endX, this.endY, this.endZ);
         ctx.stroke();
     }
 
-    this.translate = function(dx, dy){
+    this.translate = function(dx, dy, dz){
         this.startX += dx;
         this.startY += dy;
+        this.startZ += dz;
         this.endX += dx;
         this.endY += dy;
+        this.endZ += dz;
     }
 }
 
 
-function Vector(startX, startY, angle, magnitude){
-    this.startX = startX;
-    this.startY = startY;
+function Vector(origin, angle, magnitude){
+    this.startX = origin.x;
+    this.startY = origin.y;
+    this.startZ = origin.z;
     this.angle = angle;
     this.rads = (Math.PI / 180) * this.angle;
     this.magnitude = magnitude;
@@ -45,7 +57,8 @@ function Vector(startX, startY, angle, magnitude){
     this.construct = function(){
         this.endX = this.startX + Math.cos(this.rads) * this.magnitude;
         this.endY = this.startY + Math.sin(this.rads) * this.magnitude;
-        this.line = new Line(this.startX, this.startY, this.endX, this.endY);
+        this.endZ = this.startZ + Math.sin(this.rads) * this.magnitude;
+        this.line = new Line(new Point(this.startX, this.startY, this.startZ), new Point(this.endX, this.endY, this.endZ));
     }
 
     this.draw = function(){
@@ -61,18 +74,16 @@ function Vector(startX, startY, angle, magnitude){
         this.magnitude *= scalar;
     }
 
-    this.translate = function(dx, dy){
+    this.translate = function(dx, dy, dz){
         this.startX += dx;
         this.startY += dy;
+        this.startZ += dz;
     }
 }
 
 
-function Point(x, y, z){
-    this.x = x;
-    this.y = y;
-    this.z = z;
-}
+
+
 
 
 function connectPoints(p1, p2){
@@ -236,7 +247,7 @@ function Cube(x, y, z, size){
 }
 
 let cube = new Cube(0,0,0,100);
-cube.drawFrame();
+// cube.drawFrame();
 
 
 
