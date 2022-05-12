@@ -88,6 +88,7 @@ function Vector(origin, angle, depthAngle, magnitude){
         this.endPoint = new Point(this.endX, this.endY, this.endZ);
     }
 
+    // no longer functional. remake function. will have to calculate new distance from starting point //
     this.scale = function(scalar){
         this.magnitude *= scalar;
     }
@@ -272,14 +273,14 @@ function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
     this.vertexVectors = [
-        new Vector(this.center, 45, size, -109.5),
-        new Vector(this.center, 135, size, -109.5),
-        new Vector(this.center, 225, size, -109.5),
-        new Vector(this.center, 315, size, -109.5),
-        new Vector(this.center, 45, size, 109.5),
-        new Vector(this.center, 135, size, 109.5),
-        new Vector(this.center, 225, size, 109.5),
-        new Vector(this.center, 315, size, 109.5)];
+        new Vector(this.center, 45, size*2, -109.5),
+        new Vector(this.center, 135, size*2, -109.5),
+        new Vector(this.center, 225, size*2, -109.5),
+        new Vector(this.center, 315, size*2, -109.5),
+        new Vector(this.center, 45, size*2, 109.5),
+        new Vector(this.center, 135, size*2, 109.5),
+        new Vector(this.center, 225, size*2, 109.5),
+        new Vector(this.center, 315, size*2, 109.5)];
     
     this.faces = [
         [this.vertexVectors[0], this.vertexVectors[1], this.vertexVectors[2], this.vertexVectors[3]],
@@ -344,8 +345,7 @@ function animate(){
     // v.rotateX(rot1);
     // v.rotateZ(rot1);
     // v.rotateY(rot1);
-    // v.scale(2);
-    // console.log(v);
+
     cube.drawFrame();
     cube.rotateZ(1);
     cube.rotateX(1);
@@ -353,9 +353,8 @@ function animate(){
 }
 animate();
 
-//rotateY doesnt work//
 
-
-// function Polyhedron(){
-
-// }
+// ------------ BUGS ----------- //
+// 1. rotation causes vector to shrink over time //
+// 2. cube is not a cube //
+// 3. vector scaling doesn't work anymore //
