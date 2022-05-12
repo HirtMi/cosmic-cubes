@@ -45,23 +45,24 @@ function Line(p1, p2){
     }
 }
 
-
-function Vector(origin, angle, magnitude, depthAngle){
+// Axes are: X - left and right, Y - up and down, Z - front and back //
+// angle is rotating in 2D, around Z-axis. depthAngle is rotating front and back, around X-axis. Only need these 2 angles to define vector in 3D space//
+// angleY and radsY is introduced for rotating around Y axis //
+function Vector(origin, angle, depthAngle, magnitude){
     this.startX = origin.x;
     this.startY = origin.y;
     this.startZ = origin.z;
-    this.angle = angle;
-    this.depthAngle = depthAngle;
-    this.rads = (Math.PI / 180) * this.angle;
-    this.depthRads = (Math.PI / 180) * this.depthAngle;
+    this.radsZ = (Math.PI / 180) * angle;
+    this.radsX = (Math.PI / 180) * depthAngle;
+    this.radsY;
     this.magnitude = magnitude;
 
     this.construct = function(){
-        this.endX = this.startX + (Math.cos(this.depthRads) * Math.sin(this.rads) * this.magnitude);
-        this.endY = this.startY + (Math.cos(this.depthRads) * Math.cos(this.rads) * this.magnitude);
-        this.endZ = this.startZ + Math.sin(this.depthRads) * this.magnitude;
+        this.endX = this.startX + (Math.cos(this.radsX) * Math.sin(this.radsZ) * this.magnitude);
+        this.endY = this.startY + (Math.cos(this.radsX) * Math.cos(this.radsZ) * this.magnitude);
+        this.endZ = this.startZ + Math.sin(this.radsX) * this.magnitude;
         this.endPoint = new Point(this.endX, this.endY, this.endZ);
-        this.line = new Line(new Point(this.startX, this.startY, this.startZ), new Point(this.endX, this.endY, this.endZ));
+        this.line = new Line(new Point(this.startX, this.startY, this.startZ), this.endPoint);
     }
 
     this.draw = function(){
@@ -69,11 +70,25 @@ function Vector(origin, angle, magnitude, depthAngle){
         this.line.draw();
     }
 
-    this.rotate = function(angle, depthAngle){
-        this.angle += angle;
-        this.depthAngle += depthAngle;
-        this.rads += (Math.PI / 180) * angle;
-        this.depthRads += (Math.PI / 180) * depthAngle;
+    this.rotateZ = function(angleZ){
+        this.radsZ += (Math.PI / 180) * angleZ;
+        this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ)) * magnitude;
+        this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ)) * magnitude;
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+    }
+
+    this.rotateX = function(angleX){
+        this.radsX += (Math.PI / 180) * angleX;
+        this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX)) * magnitude;
+        this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX)) * magnitude;
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
+    }
+
+    this.rotateY = function(angleY){
+        this.radsY += (Math.PI / 180) * angleY;
+        this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY)) * magnitude;
+        this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY)) * magnitude;
+        this.endPoint = new Point(this.endX, this.endY, this.endZ);
     }
 
     this.scale = function(scalar){
@@ -81,7 +96,7 @@ function Vector(origin, angle, magnitude, depthAngle){
     }
 
     this.translate = function(dx, dy, dz){
-        this.startX += dx;
+        this.startXs += dx;
         this.startY += dy;
         this.startZ += dz;
     }
@@ -128,6 +143,7 @@ function Circle (x, y, radius, expansionSpeed){
         }
     }
 }
+
 
 
 function Polygon(x, y, sides, size){
@@ -303,28 +319,29 @@ function Cube(x, y, z, size){
     }
 }
 
-let cube = new Cube(0,0,0,200);
-cube.construct();
-cube.drawFrame();
+// let cube = new Cube(0,0,0,200);
+// cube.construct();
+// cube.drawFrame();
 
+let v = new Vector(new Point(0,0,0), 120, 0, 200);
+v.construct();
 
+let rot1 = 2;
+let rot2 = 0;
+const fps = 144;
+function animate(){
+    setTimeout(() => {
+        requestAnimationFrame(animate);
+    }, 1000 / fps);
+    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    v.draw();
+    v.rotateX(rot1);
+    v.rotateZ(rot1);
+    // v.rotateY(rot1);
+}
+animate();
 
-// let rot1 = 0;
-// let rot2 = 0;
-// const fps = 1;
-// function animate(){
-//     setTimeout(() => {
-//         requestAnimationFrame(animate);
-//     }, 1000 / fps);
-//     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-
-//     cube.construct();
-//     cube.drawFrame();
-//     cube.rotate(rot1,rot2);
-//     rot1++;
-//     rot2++;
-// }
-// animate();
+//rotateY doesnt work//
 
 
 function Polyhedron(){
