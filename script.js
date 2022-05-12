@@ -292,13 +292,13 @@ function Cube(x, y, z, size){
 let cube = new Cube(0,0,0,100);
 cube.construct();
 cube.drawFrame();
-console.log(cube.vertexVectors);
+console.log(cube.vertices);
 cube.rotate(123,50);
 cube.construct();
 cube.drawFrame();
-console.log(cube.vertexVectors);
+console.log(cube.vertices);
 
-
+//TODO: fix rotation in 3D somehow. good luck. //
 
 
 
