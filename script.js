@@ -19,23 +19,23 @@ function Point(x, y, z){
     this.y = y;
     this.z = z;
 
-    this.rotateZ = function(angleZ){
+    this.rotateZ = function(angleZ, centerOfRotation){
         this.radsZ = (Math.PI / 180) * angleZ;
-        this.x = (this.x * Math.cos(this.radsZ) - this.y * Math.sin(this.radsZ));
-        this.y = (this.x * Math.sin(this.radsZ) + this.y * Math.cos(this.radsZ));
+        this.x = ((this.x - centerOfRotation.x) * Math.cos(this.radsZ) - (this.y - centerOfRotation.y) * Math.sin(this.radsZ)) + centerOfRotation.x;
+        this.y = ((this.x - centerOfRotation.x) * Math.sin(this.radsZ) + (this.y - centerOfRotation.y) * Math.cos(this.radsZ)) + centerOfRotation.y;
     }
     
-    this.rotateX = function(angleX){
+    this.rotateX = function(angleX, centerOfRotation){
         this.radsX = (Math.PI / 180) * angleX;
-        this.y = (this.y * Math.cos(this.radsX) - this.z * Math.sin(this.radsX));
-        this.z = (this.y * Math.sin(this.radsX) + this.z * Math.cos(this.radsX));
-        console.log(this.endPoint);
+        this.y = ((this.y - centerOfRotation.y) * Math.cos(this.radsX) - (this.z - centerOfRotation.z) * Math.sin(this.radsX)) + centerOfRotation.y;
+        this.z = ((this.y - centerOfRotation.y) * Math.sin(this.radsX) + (this.z - centerOfRotation.z) * Math.cos(this.radsX)) + centerOfRotation.z;
+        console.log(this.x, this.y, this.z);
     }
     
-    this.rotateY = function(angleY){
+    this.rotateY = function(angleY, centerOfRotation){
         this.radsY = (Math.PI / 180) * angleY;
-        this.x = (this.x * Math.cos(this.radsY) + this.z * Math.sin(this.radsY));
-        this.z = (-1 * this.x * Math.sin(this.radsY) + this.z * Math.cos(this.radsY));
+        this.x = ((this.x - centerOfRotation.x) * Math.cos(this.radsY) + (this.z - centerOfRotation.z) * Math.sin(this.radsY)) + centerOfRotation.x;
+        this.z = (-1 * (this.x - centerOfRotation.x) * Math.sin(this.radsY) + (this.z - centerOfRotation.z) * Math.cos(this.radsY)) + centerOfRotation.z;
     }
 }
 
@@ -308,20 +308,24 @@ function Cube(x, y, z, size){
 
     this.rotateX = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertices[i].rotateX(angle);
+            this.vertices[i].rotateX(angle, this.center);
         }
     }
 
     this.rotateY = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertices[i].rotateY(angle);
+            this.vertices[i].rotateY(angle, this.center);
         }
     }
 
     this.rotateZ = function(angle){
         for (let i = 0; i < 8; i++){
-            this.vertices[i].rotateZ(angle);
+            this.vertices[i].rotateZ(angle, this.center);
         }
+    }
+
+    this.translate = function(dx, dy, dz){
+
     }
 }
 
@@ -342,21 +346,21 @@ setStroke(1, "black", 0.5);
 //     polygon.draw();
 // }
 
-let cube = new Cube(0,0,0,100);
+let cube = new Cube(-150,-250,-100,200);
 
 
-const fps = 1000;
+const fps = 60;
 function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
-    // cube.connectVerticesToOrigin();
+    cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.rotateZ(1);
-    cube.rotateX(-1);
-    cube.rotateY(-1);
+    cube.rotateX(1);
+    cube.rotateY(1);
 }
 animate();
 // ------------------- End Testing ----------------- //
@@ -366,7 +370,12 @@ animate();
 // 1. rotation causes vector to shrink over time //
 // 2. cube is not a cube //
 // 3. vector scaling doesn't work anymore //
+// 4. Rotation is about origin. Make it relative to centerOfRotation //
 
 
 // could make vector function of 2 points, rather than doing angles and magnitude //
 // or have 2 forms of vector, one for angle, magnitude, and one for 2 points //
+
+
+
+// to fix shrinking. set distance from origin that vertex must be. if its below, round up to it //
