@@ -20,25 +20,27 @@ function Point(x, y, z){
     this.z = z;
 
     this.rotateZ = function(angleZ, centerOfRotation){
-        this.radsZ = (Math.PI / 180) * angleZ;
-        // p2 = new Point(this.x, this.y, this.z);
-        // p1 = centerOfRotation;
-        // dist = Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2 + (p2.z - p1.z)**2);
-        // console.log(dist);
-        this.x = ((this.x - centerOfRotation.x) * Math.cos(this.radsZ) - (this.y - centerOfRotation.y) * Math.sin(this.radsZ)) + centerOfRotation.x;
-        this.y = ((this.x - centerOfRotation.x) * Math.sin(this.radsZ) + (this.y - centerOfRotation.y) * Math.cos(this.radsZ)) + centerOfRotation.y;
+        radsZ = (Math.PI / 180) * angleZ;
+        px = this.x;
+        py = this.y;
+        this.x = ((px - centerOfRotation.x) * Math.cos(radsZ) - (py - centerOfRotation.y) * Math.sin(radsZ)) + centerOfRotation.x;
+        this.y = ((px - centerOfRotation.x) * Math.sin(radsZ) + (py - centerOfRotation.y) * Math.cos(radsZ)) + centerOfRotation.y;
     }
     
     this.rotateX = function(angleX, centerOfRotation){
-        this.radsX = (Math.PI / 180) * angleX;
-        this.y = ((this.y - centerOfRotation.y) * Math.cos(this.radsX) - (this.z - centerOfRotation.z) * Math.sin(this.radsX)) + centerOfRotation.y;
-        this.z = ((this.y - centerOfRotation.y) * Math.sin(this.radsX) + (this.z - centerOfRotation.z) * Math.cos(this.radsX)) + centerOfRotation.z;
+        radsX = (Math.PI / 180) * angleX;
+        py = this.y;
+        pz = this.z;
+        this.y = ((py - centerOfRotation.y) * Math.cos(radsX) - (pz - centerOfRotation.z) * Math.sin(radsX)) + centerOfRotation.y;
+        this.z = ((py - centerOfRotation.y) * Math.sin(radsX) + (pz - centerOfRotation.z) * Math.cos(radsX)) + centerOfRotation.z;
     }
     
     this.rotateY = function(angleY, centerOfRotation){
-        this.radsY = (Math.PI / 180) * angleY;
-        this.x = ((this.x - centerOfRotation.x) * Math.cos(this.radsY) + (this.z - centerOfRotation.z) * Math.sin(this.radsY)) + centerOfRotation.x;
-        this.z = (-1 * (this.x - centerOfRotation.x) * Math.sin(this.radsY) + (this.z - centerOfRotation.z) * Math.cos(this.radsY)) + centerOfRotation.z;
+        radsY = (Math.PI / 180) * angleY;
+        px = this.x;
+        pz = this.z;
+        this.x = ((px - centerOfRotation.x) * Math.cos(radsY) + (pz - centerOfRotation.z) * Math.sin(radsY)) + centerOfRotation.x;
+        this.z = (-1 * (px - centerOfRotation.x) * Math.sin(radsY) + (pz - centerOfRotation.z) * Math.cos(radsY)) + centerOfRotation.z;
     }
 }
 
@@ -331,9 +333,9 @@ function Cube(x, y, z, size){
     }
 
     this.rotate = function(angleZ, angleX, angleY){
-        this.rotateZ(angleZ);
-        this.rotateX(angleX);
-        this.rotateY(angleY);
+        if (angleZ != 0){this.rotateZ(angleZ);}
+        if (angleX != 0){this.rotateX(angleX);}
+        if (angleY != 0){this.rotateY(angleY);}
     }
 
     this.translate = function(dx, dy, dz){
@@ -351,51 +353,56 @@ function Cube(x, y, z, size){
 
 
 // ----------------- Testing --------------------- //
-setStroke(1, "black", 0.5);
 
-// let origin = new Circle(0, 0, 3);
-// origin.draw();
+let origin = new Circle(0, 0, 3);
+origin.draw();
 
-// let outline = new Circle(0,0,20*11);
-// outline.draw();
+let outline = new Circle(0,0,20*11);
+outline.draw();
 
-// for (let i = 3; i < 12; i++){
-//     let polygon = new Polygon(0,0,i,20*i);
-//     polygon.construct();
-//     polygon.draw();
-// }
+let polygons = [];
+for (let i = 3; i < 12; i++){
+    let polygon = new Polygon(0,0,i,20*i);
+    polygon.construct();
+    polygons.push(polygon);
+}
 
+let p = new Point(100,100,100);
 let cube = new Cube(-150,-250,-100,200);
 let cube2 = new Cube(100,100,0,100);
-
 const fps = 60;
+
 function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
     // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+
+    setStroke(1, "black", 0.5);
+    for (let i = 0; i < polygons.length; i++){
+        polygons[i].draw();
+    }
+
     setStroke(1,"red", 0.1);
     cube2.drawFrame();
-    cube2.rotate(-1,-1,-1);
+    cube2.rotate(-3,-2,-1);
     cube2.translate(-2,1,0);
+
     setStroke(1, "blue", 0.1);
     cube.connectVerticesToOrigin();
     cube.drawFrame();
-    cube.rotate(1,0,1);
+    cube.rotate(2,2,2);
     cube.translate(4,2,0);
 }
 animate();
+
 // ------------------- End Testing ----------------- //
 
 
 // ------------ BUGS ----------- //
-// 1. rotation causes vector to shrink over time //
-// 2. vector scaling doesn't work anymore //
+// 1. vector scaling doesn't work anymore //
 
 
-
-
-// to fix shrinking. set distance from origin that vertex must be. if its below, round up to it //
 
 
 
