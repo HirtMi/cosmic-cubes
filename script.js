@@ -21,24 +21,24 @@ function Point(x, y, z){
 
     this.rotateZ = function(angleZ, centerOfRotation){
         radsZ = (Math.PI / 180) * angleZ;
-        px = this.x;
-        py = this.y;
+        let px = this.x;
+        let py = this.y;
         this.x = ((px - centerOfRotation.x) * Math.cos(radsZ) - (py - centerOfRotation.y) * Math.sin(radsZ)) + centerOfRotation.x;
         this.y = ((px - centerOfRotation.x) * Math.sin(radsZ) + (py - centerOfRotation.y) * Math.cos(radsZ)) + centerOfRotation.y;
     }
     
     this.rotateX = function(angleX, centerOfRotation){
         radsX = (Math.PI / 180) * angleX;
-        py = this.y;
-        pz = this.z;
+        let py = this.y;
+        let pz = this.z;
         this.y = ((py - centerOfRotation.y) * Math.cos(radsX) - (pz - centerOfRotation.z) * Math.sin(radsX)) + centerOfRotation.y;
         this.z = ((py - centerOfRotation.y) * Math.sin(radsX) + (pz - centerOfRotation.z) * Math.cos(radsX)) + centerOfRotation.z;
     }
     
     this.rotateY = function(angleY, centerOfRotation){
         radsY = (Math.PI / 180) * angleY;
-        px = this.x;
-        pz = this.z;
+        let px = this.x;
+        let pz = this.z;
         this.x = ((px - centerOfRotation.x) * Math.cos(radsY) + (pz - centerOfRotation.z) * Math.sin(radsY)) + centerOfRotation.x;
         this.z = (-1 * (px - centerOfRotation.x) * Math.sin(radsY) + (pz - centerOfRotation.z) * Math.cos(radsY)) + centerOfRotation.z;
     }
