@@ -382,7 +382,7 @@ function animate(){
     cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.rotate(1,0,1);
-    cube.translate(2,1,0);
+    cube.translate(4,2,0);
 }
 animate();
 // ------------------- End Testing ----------------- //
