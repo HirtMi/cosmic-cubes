@@ -391,10 +391,10 @@ for (let i = 0; i < polygons.length; i++){
 }
 
 let p = new Point(100,100,100);
-let cube = new Cube(-150,-250,-100,200);
-let cube2 = new Cube(100,100,0,100);
+let cube = new Cube(150,-250,-100,200);
+let cube2 = new Cube(-100,300,0,100);
 const fps = 60;
-let v = new Vector3D(new Point(100,100,100), 50, 20, 200);
+let v = new Vector3D(new Point(180,180,100), 50, 20, 200);
 v.construct();
 
 function animate(){
@@ -416,7 +416,7 @@ function animate(){
     setStroke(1,"red", 0.1);
     cube2.drawFrame();
     cube2.rotate(-3,-2,-1);
-    cube2.translate(-2,1,0);
+    cube2.translate(-2,-1,0);
 
     setStroke(1, "blue", 0.1);
     cube.connectVerticesToOrigin();
