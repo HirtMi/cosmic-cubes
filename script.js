@@ -21,6 +21,10 @@ function Point(x, y, z){
 
     this.rotateZ = function(angleZ, centerOfRotation){
         this.radsZ = (Math.PI / 180) * angleZ;
+        // p2 = new Point(this.x, this.y, this.z);
+        // p1 = centerOfRotation;
+        // dist = Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2 + (p2.z - p1.z)**2);
+        // console.log(dist);
         this.x = ((this.x - centerOfRotation.x) * Math.cos(this.radsZ) - (this.y - centerOfRotation.y) * Math.sin(this.radsZ)) + centerOfRotation.x;
         this.y = ((this.x - centerOfRotation.x) * Math.sin(this.radsZ) + (this.y - centerOfRotation.y) * Math.cos(this.radsZ)) + centerOfRotation.y;
     }
@@ -29,7 +33,6 @@ function Point(x, y, z){
         this.radsX = (Math.PI / 180) * angleX;
         this.y = ((this.y - centerOfRotation.y) * Math.cos(this.radsX) - (this.z - centerOfRotation.z) * Math.sin(this.radsX)) + centerOfRotation.y;
         this.z = ((this.y - centerOfRotation.y) * Math.sin(this.radsX) + (this.z - centerOfRotation.z) * Math.cos(this.radsX)) + centerOfRotation.z;
-        console.log(this.x, this.y, this.z);
     }
     
     this.rotateY = function(angleY, centerOfRotation){
@@ -51,6 +54,8 @@ function connectPoints(p1, p2){
 function Line(p1, p2){
     this.p1 = p1;
     this.p2 = p2;
+
+    this.length = Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2 + (p2.z - p1.z)**2);
 
     this.draw = function(){
         ctx.beginPath();
@@ -332,7 +337,14 @@ function Cube(x, y, z, size){
     }
 
     this.translate = function(dx, dy, dz){
-
+        this.center.x += dx;
+        this.center.y += dy;
+        this.center.z += dz;
+        for (let i = 0; i < this.vertices.length; i++){
+            this.vertices[i].x += dx;
+            this.vertices[i].y += dy;
+            this.vertices[i].z += dz;
+        }
     }
 }
 
@@ -361,14 +373,16 @@ function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
-    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    setStroke(3,"red");
+    // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    setStroke(1,"red", 0.1);
     cube2.drawFrame();
     cube2.rotate(-1,-1,-1);
-    setStroke(2, "blue");
+    cube2.translate(-2,1,0);
+    setStroke(1, "blue", 0.1);
     cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.rotate(1,0,1);
+    cube.translate(2,1,0);
 }
 animate();
 // ------------------- End Testing ----------------- //
