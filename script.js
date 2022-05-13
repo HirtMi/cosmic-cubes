@@ -252,6 +252,7 @@ function Vector3D(origin, endPoint, angle, depthAngle, magnitude){
         console.log(this.endPoint);
     }
 
+
     // no longer functional. remake function. will have to calculate new distance from starting point //
     this.scale = function(scalar){
         this.magnitude *= scalar;
@@ -324,6 +325,12 @@ function Cube(x, y, z, size){
         }
     }
 
+    this.rotate = function(angleZ, angleX, angleY){
+        this.rotateZ(angleZ);
+        this.rotateX(angleX);
+        this.rotateY(angleY);
+    }
+
     this.translate = function(dx, dy, dz){
 
     }
@@ -347,7 +354,7 @@ setStroke(1, "black", 0.5);
 // }
 
 let cube = new Cube(-150,-250,-100,200);
-
+let cube2 = new Cube(100,100,0,100);
 
 const fps = 60;
 function animate(){
@@ -355,12 +362,13 @@ function animate(){
         requestAnimationFrame(animate);
     }, 1000 / fps);
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-
+    setStroke(3,"red");
+    cube2.drawFrame();
+    cube2.rotate(-1,-1,-1);
+    setStroke(2, "blue");
     cube.connectVerticesToOrigin();
     cube.drawFrame();
-    cube.rotateZ(1);
-    cube.rotateX(1);
-    cube.rotateY(1);
+    cube.rotate(1,0,1);
 }
 animate();
 // ------------------- End Testing ----------------- //
@@ -368,13 +376,8 @@ animate();
 
 // ------------ BUGS ----------- //
 // 1. rotation causes vector to shrink over time //
-// 2. cube is not a cube //
-// 3. vector scaling doesn't work anymore //
-// 4. Rotation is about origin. Make it relative to centerOfRotation //
+// 2. vector scaling doesn't work anymore //
 
-
-// could make vector function of 2 points, rather than doing angles and magnitude //
-// or have 2 forms of vector, one for angle, magnitude, and one for 2 points //
 
 
 
