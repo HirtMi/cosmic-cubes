@@ -396,3 +396,9 @@ animate();
 
 
 // to fix shrinking. set distance from origin that vertex must be. if its below, round up to it //
+
+
+
+// Future Features //
+// 1. Add ability to graph functions and have cube center follow curve //
+// 2. Other 3D shapes //
