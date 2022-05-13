@@ -57,7 +57,7 @@ function Line(p1, p2){
     this.p1 = p1;
     this.p2 = p2;
 
-    this.length = Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2 + (p2.z - p1.z)**2);
+    // this.length = Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2 + (p2.z - p1.z)**2);
 
     this.draw = function(){
         ctx.beginPath();
@@ -204,11 +204,10 @@ function connectPolygons(poly1, poly2){
 }
 
 
-// this might be outdated and/or useless. consider deleting //
 // Axes: X - left/right, Y - up/down, Z - front/back //
 // 'angle' is regular rotation in 2D (around Z-axis). 'depthAngle' is rotation front and back, around X-axis. Only need these 2 angles to construct vector in 3D space //
 // 'radsY' is introduced for rotation around Y axis //
-function Vector3D(origin, endPoint, angle, depthAngle, magnitude){
+function Vector3D(origin, angle, depthAngle, magnitude){
     this.startX = origin.x;
     this.startY = origin.y;
     this.startZ = origin.z;
@@ -216,7 +215,6 @@ function Vector3D(origin, endPoint, angle, depthAngle, magnitude){
     this.radsX = (Math.PI / 180) * depthAngle;
     this.radsY;
     this.magnitude = magnitude;
-    this.endPoint = endPoint;
     this.line = new Line(new Point(this.startX, this.startY, this.startZ), this.endPoint);
 
     this.construct = function(){
@@ -232,31 +230,22 @@ function Vector3D(origin, endPoint, angle, depthAngle, magnitude){
         this.line.draw();
     }
 
-    this.rotateZ = function(angleZ){
-        this.radsZ = (Math.PI / 180) * angleZ;
-        this.endX = (this.endX * Math.cos(this.radsZ) - this.endY * Math.sin(this.radsZ));
-        this.endY = (this.endX * Math.sin(this.radsZ) + this.endY * Math.cos(this.radsZ));
-        this.endPoint.x = this.endX;
-        this.endPoint.y = this.endY;
-        console.log(this.endPoint);
+    this.rotateX = function(angle){
+        this.endPoint.rotateX(angle, origin);
     }
-    
-    this.rotateX = function(angleX){
-        this.radsX = (Math.PI / 180) * angleX;
-        this.endY = (this.endY * Math.cos(this.radsX) - this.endZ * Math.sin(this.radsX));
-        this.endZ = (this.endY * Math.sin(this.radsX) + this.endZ * Math.cos(this.radsX));
-        this.endPoint.y = this.endY;
-        this.endPoint.z = this.endZ;
-        console.log(this.endPoint);
+
+    this.rotateY = function(angle){
+        this.endPoint.rotateY(angle, origin);
     }
-    
-    this.rotateY = function(angleY){
-        this.radsY = (Math.PI / 180) * angleY;
-        this.endX = (this.endX * Math.cos(this.radsY) + this.endZ * Math.sin(this.radsY));
-        this.endZ = (-1 * this.endX * Math.sin(this.radsY) + this.endZ * Math.cos(this.radsY));
-        this.endPoint.x = this.endX;
-        this.endPoint.z = this.endZ;
-        console.log(this.endPoint);
+
+    this.rotateZ = function(angle){
+        this.endPoint.rotateZ(angle, origin);
+    }
+
+    this.rotate = function(angleZ, angleX, angleY){
+        if (angleZ != 0){this.rotateZ(angleZ);}
+        if (angleX != 0){this.rotateX(angleX);}
+        if (angleY != 0){this.rotateY(angleY);}
     }
 
 
@@ -366,22 +355,27 @@ for (let i = 3; i < 12; i++){
     polygon.construct();
     polygons.push(polygon);
 }
+setStroke(1, "black", 0.5);
+for (let i = 0; i < polygons.length; i++){
+    polygons[i].draw();
+}
 
 let p = new Point(100,100,100);
 let cube = new Cube(-150,-250,-100,200);
 let cube2 = new Cube(100,100,0,100);
 const fps = 60;
+let v = new Vector3D(new Point(100,100,100), 50, 20, 200);
+v.construct();
 
 function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
-    // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
-    setStroke(1, "black", 0.5);
-    for (let i = 0; i < polygons.length; i++){
-        polygons[i].draw();
-    }
+
+    v.draw();
+    v.rotate(1,0,2);
 
     setStroke(1,"red", 0.1);
     cube2.drawFrame();
@@ -392,7 +386,7 @@ function animate(){
     cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.rotate(2,2,2);
-    cube.translate(4,2,0);
+    cube.translate(2,1,0);
 }
 animate();
 
