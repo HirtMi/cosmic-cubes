@@ -265,6 +265,7 @@ function Vector3D(origin, angle, depthAngle, magnitude){
 function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
+    this.orientation = [0,0,0];
 
     this.vertices = [
         new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
@@ -304,18 +305,21 @@ function Cube(x, y, z, size){
     }
 
     this.rotateX = function(angle){
+        this.orientation[1] += angle;
         for (let i = 0; i < 8; i++){
             this.vertices[i].rotateX(angle, this.center);
         }
     }
 
     this.rotateY = function(angle){
+        this.orientation[2] += angle;
         for (let i = 0; i < 8; i++){
             this.vertices[i].rotateY(angle, this.center);
         }
     }
 
     this.rotateZ = function(angle){
+        this.orientation[0] += angle;
         for (let i = 0; i < 8; i++){
             this.vertices[i].rotateZ(angle, this.center);
         }
@@ -336,6 +340,32 @@ function Cube(x, y, z, size){
             this.vertices[i].y += dy;
             this.vertices[i].z += dz;
         }
+    }
+
+    // causes cube to spin way too fast //
+    this.scale = function(scale_factor){
+        this.dist *= scale_factor;
+        this.vertices = [
+            new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
+            new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
+            new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z - this.dist),
+            new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z + this.dist),
+            new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z + this.dist),
+            new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z - this.dist),
+            new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z - this.dist),
+            new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z + this.dist)
+        ];
+
+        this.faces = [
+            [this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
+            [this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
+            [this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
+            [this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
+            [this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
+            [this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]]
+        ];
+
+        this.rotate(this.orientation[0], this.orientation[1], this.orientation[2]);
     }
 }
 
@@ -371,11 +401,17 @@ function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
-    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
 
     v.draw();
     v.rotate(1,0,2);
+
+    setStroke(1, "black", .3);
+    for (let i = 0; i < polygons.length; i++){
+        polygons[i].draw();
+        polygons[i].dilate(0.98);
+    }
 
     setStroke(1,"red", 0.1);
     cube2.drawFrame();
@@ -384,11 +420,13 @@ function animate(){
 
     setStroke(1, "blue", 0.1);
     cube.connectVerticesToOrigin();
+    // cube.scale(1.00001);
     cube.drawFrame();
     cube.rotate(2,2,2);
     cube.translate(2,1,0);
 }
 animate();
+
 
 // ------------------- End Testing ----------------- //
 
@@ -403,3 +441,4 @@ animate();
 // Future Features //
 // 1. Add ability to graph functions and have cube center follow curve //
 // 2. Other 3D shapes //
+// 3. Hypercube. //
