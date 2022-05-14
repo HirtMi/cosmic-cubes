@@ -440,9 +440,10 @@ animate();
 
 
 // THIS is the way //
-// Create full 3D environment with movable camera //
+// Create full 3D environment with movable camera. Bruh do this//
 
 // Future Features //
+// 0. Create full 3D environment with movable camera //
 // 1. Add ability to graph functions and have cube center follow curve //
 // 2. Other 3D shapes //
 // 3. Hypercube. //
