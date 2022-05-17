@@ -291,9 +291,9 @@ function Cube(x, y, z, size){
     this.drawFrame = function(){
         for (let i = 0; i < this.faces.length; i++){
             for (let j = 0; j < this.faces[i].length - 1; j++){
-                connectPoints(this.faces[i][j], this.faces[i][j+1]);
+                connectPoints(Project(this.faces[i][j]), Project(this.faces[i][j+1]));
                 }
-            connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
+            connectPoints(Project(this.faces[i][0]), Project(this.faces[i][this.faces[i].length - 1]));
             }
         }
 
@@ -368,6 +368,11 @@ function Cube(x, y, z, size){
     }
 }
 
+function Project(point){
+    let dist = 200;
+    let r = dist / point.z;
+    return new Point(r * point.x, r * point.y);
+}
 
 randomColor = function(){
     return "#" + Math.floor(Math.random()*16777215).toString(16);
@@ -381,57 +386,34 @@ origin.draw();
 let outline = new Circle(0,0,20*11);
 outline.draw();
 
-let polygons = [];
-for (let i = 3; i < 12; i++){
-    let polygon = new Polygon(0,0,i,20*i);
-    polygon.construct();
-    polygons.push(polygon);
-}
-setStroke(1, "black", 0.5);
-for (let i = 0; i < polygons.length; i++){
-    polygons[i].draw();
-}
+
+
 
 let p = new Point(100,100,100);
-let cube = new Cube(150,-250,-100,200);
-let cube2 = new Cube(-100,300,0,100);
 const fps = 60;
-let v = new Vector3D(new Point(280,280,100), 50, 20, 200);
-let v2 = new Vector3D(new Point(280,280,100), 230, 20, 200);
-v.construct();
-v2.construct();
 
+
+let cube = new Cube(0,0,30,30);
 function animate(){
     setTimeout(() => {
         requestAnimationFrame(animate);
     }, 1000 / fps);
-    // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
-    setStroke(1, "black", .1);
-    for (let i = 0; i < polygons.length; i++){
-        polygons[i].draw();
-        polygons[i].dilate(0.98);
-    }
-
-    setStroke(1,"#ddaacc", 0.1);
-    cube2.drawFrame();
-    cube2.rotate(-3,-2,-1);
-    cube2.translate(-2,-1,0);
-
-    setStroke(1, "#00aaff", 0.1);
-    cube.connectVerticesToOrigin();
+    setStroke(1, "#00aaff", 0.2);
+    // cube.connectVerticesToOrigin();
     // cube.scale(1);
     cube.drawFrame();
+    cube.translate(1,0,1);
     cube.rotate(2,2,2);
-    cube.translate(3,2,5);
 
-    setStroke(3, randomColor(), 0.1);
-    v.draw();
-    v.rotate(1,0,2);
-    v2.draw();
-    v2.rotate(1,0,2);
+
 }
 animate();
+
+
+
+
 
 
 // ------------------- End Testing ----------------- //
