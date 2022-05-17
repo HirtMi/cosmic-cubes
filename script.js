@@ -266,7 +266,7 @@ function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
     this.orientation = [0,0,0];
-
+    
     this.vertices = [
         new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
         new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
@@ -290,10 +290,10 @@ function Cube(x, y, z, size){
   
     this.drawFrame = function(){
         for (let i = 0; i < this.faces.length; i++){
-            for (let j = 0; j < 3; j++){
+            for (let j = 0; j < this.faces[i].length - 1; j++){
                 connectPoints(this.faces[i][j], this.faces[i][j+1]);
                 }
-            connectPoints(this.faces[i][0], this.faces[i][3]);
+            connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
             }
         }
 
@@ -303,24 +303,24 @@ function Cube(x, y, z, size){
         }
     }
 
+    this.rotateZ = function(angle){
+        this.orientation[0] += angle;
+        for (let i = 0; i < this.vertices.length; i++){
+            this.vertices[i].rotateZ(angle, this.center);
+        }
+    }
+
     this.rotateX = function(angle){
         this.orientation[1] += angle;
-        for (let i = 0; i < 8; i++){
+        for (let i = 0; i < this.vertices.length; i++){
             this.vertices[i].rotateX(angle, this.center);
         }
     }
 
     this.rotateY = function(angle){
         this.orientation[2] += angle;
-        for (let i = 0; i < 8; i++){
+        for (let i = 0; i < this.vertices.length; i++){
             this.vertices[i].rotateY(angle, this.center);
-        }
-    }
-
-    this.rotateZ = function(angle){
-        this.orientation[0] += angle;
-        for (let i = 0; i < 8; i++){
-            this.vertices[i].rotateZ(angle, this.center);
         }
     }
 
@@ -369,6 +369,9 @@ function Cube(x, y, z, size){
 }
 
 
+randomColor = function(){
+    return "#" + Math.floor(Math.random()*16777215).toString(16);
+}
 
 // ----------------- Testing --------------------- //
 
@@ -417,12 +420,12 @@ function animate(){
 
     setStroke(1, "#00aaff", 0.1);
     cube.connectVerticesToOrigin();
-    // cube.scale(1.00001);
+    // cube.scale(1);
     cube.drawFrame();
     cube.rotate(2,2,2);
-    cube.translate(3,2,0);
+    cube.translate(3,2,5);
 
-    setStroke(1, "#00CCFF", 0.1);
+    setStroke(3, randomColor(), 0.1);
     v.draw();
     v.rotate(1,0,2);
     v2.draw();
@@ -432,6 +435,11 @@ animate();
 
 
 // ------------------- End Testing ----------------- //
+
+// TODO: make cube function a general polyhedron function. have subfunction to construct vertices and faces for different polyhedrons //
+
+// TODO: make it actual 3D environment where you can move camera around and it has depth //
+
 
 
 // ------------ BUGS ----------- //
@@ -448,3 +456,5 @@ animate();
 // 2. Other 3D shapes //
 // 3. Hypercube. //
 // 4. Fractals. Recursion //
+// 5. Increase resolution //
+// 6. Cool 3D visualizations of different algorithms and techniques. DFS/BFS, sorting algorithms, graph traversal, etc //
