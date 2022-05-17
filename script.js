@@ -47,6 +47,8 @@ function Point(x, y, z){
 
 function connectPoints(p1, p2){
     ctx.beginPath();
+    p1 = Project(p1);
+    p2 = Project(p2);
     ctx.moveTo(p1.x, p1.y, p1.z);
     ctx.lineTo(p2.x, p2.y, p2.z);
     ctx.stroke();
@@ -291,9 +293,9 @@ function Cube(x, y, z, size){
     this.drawFrame = function(){
         for (let i = 0; i < this.faces.length; i++){
             for (let j = 0; j < this.faces[i].length - 1; j++){
-                connectPoints(Project(this.faces[i][j]), Project(this.faces[i][j+1]));
+                connectPoints(this.faces[i][j], this.faces[i][j+1]);
                 }
-            connectPoints(Project(this.faces[i][0]), Project(this.faces[i][this.faces[i].length - 1]));
+            connectPoints(this.faces[i][0], this.faces[i][this.faces[i].length - 1]);
             }
         }
 
@@ -404,7 +406,7 @@ function animate(){
     // cube.connectVerticesToOrigin();
     // cube.scale(1);
     cube.drawFrame();
-    cube.translate(1,0,1);
+    cube.translate(2,-1,1);
     cube.rotate(2,2,2);
 
 
