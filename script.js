@@ -286,6 +286,7 @@ function Cube(x, y, z, size){
     ];
   
     this.drawFrame = function(){
+        if (this.center.z < -2000){return;}
         for (let i = 0; i < this.faces.length; i++){
             for (let j = 0; j < this.faces[i].length - 1; j++){
                 connectPoints(this.faces[i][j], this.faces[i][j+1]);
@@ -325,6 +326,7 @@ function Cube(x, y, z, size){
     }
 
     this.translate = function(dx, dy, dz){
+        console.log(this.center.z);
         this.center.x += dx;
         this.center.y += dy;
         this.center.z += dz;
@@ -358,16 +360,25 @@ randomColor = function(){
 
 // ----------------- Testing --------------------- //
 
+// let polygons = [];
+// for (let i = 3; i < 12; i++){
+//     let polygon = new Polygon(0,0,i,20*i);
+//     polygon.construct();
+//     polygons.push(polygon);
+// }
+// setStroke(1, "black", 0.5);
+// for (let i = 0; i < polygons.length; i++){
+//     polygons[i].draw();
+// }
 
-let origin = new Circle(0, 0, 3);
-origin.draw();
+// let origin = new Circle(0, 0, 3);
+// origin.draw();
 
-let outline = new Circle(0,0,20*11);
-outline.draw();
+// let outline = new Circle(0,0,20*11);
+// outline.draw();
 
-let p = new Point(100,100,100);
 let cube = new Cube(-150,100,300,300);
-
+let cube2 = new Cube(200,300,200,200);
 
 const fps = 60;
 let PLAY = true;
@@ -380,12 +391,19 @@ function animate(){
     }
 
 
-    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    setStroke(1, "#00aaff", 0.2);
-    // cube.connectVerticesToOrigin();
+    // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    ctx.fillStyle = "black";
+    ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    setStroke(1, "#00aaff", 0.07);
+    cube.connectVerticesToOrigin();
     cube.drawFrame();
     cube.translate(1,-1,-4);
     cube.rotate(2,2,2);
+
+    setStroke(1, "#ff33aa", 0.07);
+    cube2.drawFrame();
+    cube2.translate(-1,-1,-1);
+    cube2.rotate(-1,2,-1);
 }
 animate();
 
@@ -398,9 +416,8 @@ window.addEventListener("click", function(){
 
 // ------------------- End Testing ----------------- //
 
+// TODO: make function to allow center of cube to follow a function of a curved line //
 // TODO: make cube function a general polyhedron function. have subfunction to construct vertices and faces for different polyhedrons //
-
-// TODO: make it actual 3D environment where you can move camera around and it has depth //
 
 
 
