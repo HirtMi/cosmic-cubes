@@ -47,8 +47,6 @@ function Point(x, y, z){
 
 function connectPoints(p1, p2){
     ctx.beginPath();
-    p1 = Project(p1);
-    p2 = Project(p2);
     ctx.moveTo(p1.x, p1.y, p1.z);
     ctx.lineTo(p2.x, p2.y, p2.z);
     ctx.stroke();
@@ -343,44 +341,40 @@ function Cube(x, y, z, size){
         }
     }
 
-    // causes cube to spin way too fast //
-    this.scale = function(scale_factor){
-        this.dist *= scale_factor;
-        this.vertices = [
-            new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
-            new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z - this.dist),
-            new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z - this.dist),
-            new Point(this.center.x + this.dist, this.center.y - this.dist, this.center.z + this.dist),
-            new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z + this.dist),
-            new Point(this.center.x + this.dist, this.center.y + this.dist, this.center.z - this.dist),
-            new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z - this.dist),
-            new Point(this.center.x - this.dist, this.center.y + this.dist, this.center.z + this.dist)
-        ];
+    this.scale = function(scalar){
+        for (let i = 0; i < this.vertices.length; i++){
+            this.scalePoint(this.vertices[i], this.center, scalar)
+        }
+    }
 
-        this.faces = [
-            [this.vertices[0], this.vertices[1], this.vertices[2], this.vertices[3]],
-            [this.vertices[4], this.vertices[5], this.vertices[6], this.vertices[7]],
-            [this.vertices[3], this.vertices[2], this.vertices[5], this.vertices[4]],
-            [this.vertices[7], this.vertices[6], this.vertices[1], this.vertices[0]],
-            [this.vertices[7], this.vertices[0], this.vertices[3], this.vertices[4]],
-            [this.vertices[1], this.vertices[6], this.vertices[5], this.vertices[2]]
-        ];
+    this.scalePoint = function(point, center, scalar){
+        // find equation of line containing point and center
+        // find distance between point and center
+        // multiply distance by scale_factor
+        // find point on line where distance equals new distance
+        // profit
+        
+        // newPoint = center + scale_factor * point
+        point.x = center.x + scalar * (point.x - center.x);
+        point.y = center.y + scalar * (point.y - center.y);
+        point.z = center.z + scalar * (point.z - center.z);
 
-        this.rotate(this.orientation[0], this.orientation[1], this.orientation[2]);
     }
 }
 
-function Project(point){
-    let dist = 200;
-    let r = dist / point.z;
-    return new Point(r * point.x, r * point.y);
-}
 
 randomColor = function(){
     return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
+
+// have depth-scaling built in to every object //
+// before you draw it, scale it based on Z coorindate // 
+// store original vertices //
+
+
 // ----------------- Testing --------------------- //
+
 
 let origin = new Circle(0, 0, 3);
 origin.draw();
@@ -389,7 +383,8 @@ let outline = new Circle(0,0,20*11);
 outline.draw();
 
 let p = new Point(100,100,100);
-let cube = new Cube(-200,100,30,30);
+let cube = new Cube(-150,100,0,100);
+
 
 
 const fps = 60;
@@ -406,10 +401,10 @@ function animate(){
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     setStroke(1, "#00aaff", 0.2);
     // cube.connectVerticesToOrigin();
-    // cube.scale(1);
+    cube.scale(1.01);
     cube.drawFrame();
-    cube.translate(2,-1,1);
-    cube.rotate(2,1,1);
+    cube.translate(2,-1,-1);
+    cube.rotate(2,2,2);
 }
 animate();
 
