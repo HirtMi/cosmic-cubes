@@ -388,33 +388,35 @@ origin.draw();
 let outline = new Circle(0,0,20*11);
 outline.draw();
 
-
-
-
 let p = new Point(100,100,100);
+let cube = new Cube(-200,100,30,30);
+
+
 const fps = 60;
-
-
-let cube = new Cube(0,0,30,30);
+let PLAY = true;
 function animate(){
-    setTimeout(() => {
-        requestAnimationFrame(animate);
-    }, 1000 / fps);
-    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
+    if (PLAY == true){
+        setTimeout(() => {
+            requestAnimationFrame(animate);
+        }, 1000 / fps);
+    }
+
+
+    ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     setStroke(1, "#00aaff", 0.2);
     // cube.connectVerticesToOrigin();
     // cube.scale(1);
     cube.drawFrame();
     cube.translate(2,-1,1);
-    cube.rotate(2,2,2);
-
-
+    cube.rotate(2,1,1);
 }
 animate();
 
-
-
+window.addEventListener("click", function(){
+    PLAY = !PLAY;
+    if (PLAY == true){animate()};
+})
 
 
 
