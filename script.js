@@ -265,7 +265,6 @@ function Vector3D(origin, angle, depthAngle, magnitude){
 function Cube(x, y, z, size){
     this.center = new Point(x,y,z);
     this.dist = size / 2;
-    this.orientation = [0,0,0];
     
     this.vertices = [
         new Point(this.center.x - this.dist, this.center.y - this.dist, this.center.z + this.dist),
@@ -289,6 +288,7 @@ function Cube(x, y, z, size){
     ];
   
     this.drawFrame = function(){
+        this.scale(1 - (.00007 * this.center.z));
         for (let i = 0; i < this.faces.length; i++){
             for (let j = 0; j < this.faces[i].length - 1; j++){
                 connectPoints(this.faces[i][j], this.faces[i][j+1]);
@@ -304,21 +304,18 @@ function Cube(x, y, z, size){
     }
 
     this.rotateZ = function(angle){
-        this.orientation[0] += angle;
         for (let i = 0; i < this.vertices.length; i++){
             this.vertices[i].rotateZ(angle, this.center);
         }
     }
 
     this.rotateX = function(angle){
-        this.orientation[1] += angle;
         for (let i = 0; i < this.vertices.length; i++){
             this.vertices[i].rotateX(angle, this.center);
         }
     }
 
     this.rotateY = function(angle){
-        this.orientation[2] += angle;
         for (let i = 0; i < this.vertices.length; i++){
             this.vertices[i].rotateY(angle, this.center);
         }
@@ -348,17 +345,9 @@ function Cube(x, y, z, size){
     }
 
     this.scalePoint = function(point, center, scalar){
-        // find equation of line containing point and center
-        // find distance between point and center
-        // multiply distance by scale_factor
-        // find point on line where distance equals new distance
-        // profit
-        
-        // newPoint = center + scale_factor * point
         point.x = center.x + scalar * (point.x - center.x);
         point.y = center.y + scalar * (point.y - center.y);
         point.z = center.z + scalar * (point.z - center.z);
-
     }
 }
 
@@ -401,9 +390,8 @@ function animate(){
     ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     setStroke(1, "#00aaff", 0.2);
     // cube.connectVerticesToOrigin();
-    cube.scale(1.01);
     cube.drawFrame();
-    cube.translate(2,-1,-1);
+    cube.translate(2,-1,1);
     cube.rotate(2,2,2);
 }
 animate();
