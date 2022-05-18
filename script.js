@@ -57,8 +57,6 @@ function Line(p1, p2){
     this.p1 = p1;
     this.p2 = p2;
 
-    // this.length = Math.sqrt((p2.x - p1.x)**2 + (p2.y - p1.y)**2 + (p2.z - p1.z)**2);
-
     this.draw = function(){
         ctx.beginPath();
         ctx.moveTo(this.p1.x, this.p1.y, this.p1.z);
@@ -288,7 +286,6 @@ function Cube(x, y, z, size){
     ];
   
     this.drawFrame = function(){
-        this.scale(1 - (.00007 * this.center.z));
         for (let i = 0; i < this.faces.length; i++){
             for (let j = 0; j < this.faces[i].length - 1; j++){
                 connectPoints(this.faces[i][j], this.faces[i][j+1]);
@@ -336,6 +333,7 @@ function Cube(x, y, z, size){
             this.vertices[i].y += dy;
             this.vertices[i].z += dz;
         }
+        this.scale(1 - (.001 * dz));
     }
 
     this.scale = function(scalar){
@@ -357,10 +355,6 @@ randomColor = function(){
 }
 
 
-// have depth-scaling built in to every object //
-// before you draw it, scale it based on Z coorindate // 
-// store original vertices //
-
 
 // ----------------- Testing --------------------- //
 
@@ -372,8 +366,7 @@ let outline = new Circle(0,0,20*11);
 outline.draw();
 
 let p = new Point(100,100,100);
-let cube = new Cube(-150,100,0,100);
-
+let cube = new Cube(-150,100,300,300);
 
 
 const fps = 60;
@@ -391,7 +384,7 @@ function animate(){
     setStroke(1, "#00aaff", 0.2);
     // cube.connectVerticesToOrigin();
     cube.drawFrame();
-    cube.translate(2,-1,1);
+    cube.translate(1,-1,-4);
     cube.rotate(2,2,2);
 }
 animate();
