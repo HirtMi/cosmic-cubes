@@ -1,5 +1,6 @@
-let WIDTH = window.innerWidth;
-let HEIGHT = window.innerHeight
+let SCALE = 1.5;
+let WIDTH = window.innerWidth * SCALE;
+let HEIGHT = window.innerHeight * SCALE;
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 canvas.width = WIDTH;
@@ -446,7 +447,7 @@ function animate(){
     // cube2.rotate(-.5,1,-.5);
 
     for (i = 0; i < cubes.length; i++){
-        setStroke(1, colors[i], .07);
+        setStroke(2, colors[i], .007);
         cubes[i].connectVerticesToOrigin();
         cubes[i].drawFrame();
         cubes[i].translate(translations[i][0], translations[i][1], translations[i][2]);
