@@ -355,9 +355,9 @@ let rotations = [];
 let colors = [];
 
 function generateRandomCube(){
-    let x = Math.random() * (WIDTH/2) * ((Math.random() - 0.5) * 2);
-    let y = Math.random() * (HEIGHT/2) * ((Math.random() - 0.5) * 2);
-    let z = Math.random() * 100 * ((Math.random() - 0.5) * 2);
+    let x = Math.random() * (WIDTH) * ((Math.random() - 0.5) * 2);
+    let y = Math.random() * (HEIGHT) * ((Math.random() - 0.5) * 2);
+    let z = Math.random() * HEIGHT * ((Math.random() - 0.5) * 2);
     let size = Math.random() * (400 - 100) + 100;
     let color = randomColor();
     let translation = [
@@ -385,6 +385,7 @@ for (i = 0; i < 101; i++){
 
 // ----------------- Animation --------------------- //
 
+ctx.globalCompositeOperation = "lighter";
 ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
 const fps = 60;
