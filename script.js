@@ -356,6 +356,43 @@ randomColor = function(){
     return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
+let randSign = (Math.random() - 0.5) * 2;
+
+let cubes = [];
+let translations = [];
+let rotations = [];
+let colors = [];
+
+function generateRandomCube(){
+    let x = Math.random() * (WIDTH/2) * ((Math.random() - 0.5) * 2);
+    let y = Math.random() * (HEIGHT/2) * ((Math.random() - 0.5) * 2);
+    let z = Math.random() * 100 * ((Math.random() - 0.5) * 2);
+    let size = Math.random() * (400 - 100) + 100;
+    let color = randomColor();
+    let translation = [
+         Math.random()*10 * ((Math.random() - 0.5) * 2),
+         Math.random()*10 * ((Math.random() - 0.5) * 2), 
+         Math.random()*10 * ((Math.random() - 0.5) * 2)
+        ];
+    let rotation = [
+        Math.random()*3 * ((Math.random() - 0.5) * 2),
+         Math.random()*3 * ((Math.random() - 0.5) * 2), 
+         Math.random()*3 * ((Math.random() - 0.5) * 2)
+        ];
+    
+    let cube = new Cube(x, y, z, size);
+
+    cubes.push(cube);
+    translations.push(translation);
+    rotations.push(rotation);
+    colors.push(color);
+}
+
+for (i=0;i<10;i++){
+    generateRandomCube();
+}
+
+
 
 
 // ----------------- Testing --------------------- //
@@ -377,10 +414,7 @@ randomColor = function(){
 // let outline = new Circle(0,0,20*11);
 // outline.draw();
 
-let v = new Vector3D(new Point(480,280,100), 50, 20, 200);
-let v2 = new Vector3D(new Point(480,280,100), 230, 20, 200);
-v.construct();
-v2.construct();
+
 
 let cube = new Cube(-150,100,300,300);
 let cube2 = new Cube(200,300,200,200);
@@ -405,16 +439,18 @@ function animate(){
     // cube.translate(1,-1,-4);
     // cube.rotate(2,2,2);
 
-    setStroke(1, "#ff33aa", 0.07);
+    setStroke(1, "#ff33aa", 0.0007);
     cube2.drawFrame();
     cube2.translate(-1,-1,-1);
     cube2.rotate(-.5,1,-.5);
 
-    setStroke(3, randomColor(), 0.007);
-    v.draw();
-    v.rotate(1,0,2);
-    v2.draw();
-    v2.rotate(1,0,2);
+    for (i = 0; i < cubes.length; i++){
+        setStroke(2, colors[i], .007);
+        cubes[i].drawFrame();
+        cubes[i].translate(translations[i][0], translations[i][1], translations[i][2]);
+        cubes[i].rotate(rotations[i][0], rotations[i][1], rotations[i][2]);
+    }
+
 }
 animate();
 
@@ -427,24 +463,5 @@ window.addEventListener("click", function(){
 
 // ------------------- End Testing ----------------- //
 
-// TODO: make function to allow center of cube to follow a function of a curved line //
-// TODO: make cube function a general polyhedron function. have subfunction to construct vertices and faces for different polyhedrons //
-
-
-
-// ------------ BUGS ----------- //
-// 1. vector scaling doesn't work anymore //
-
-
-
-// THIS is the way //
-// Create full 3D environment with movable camera. Bruh do this//
-
-// Future Features //
-// 0. Create full 3D environment with movable camera //
-// 1. Add ability to graph functions and have cube center follow curve //
-// 2. Other 3D shapes //
-// 3. Hypercube. //
-// 4. Fractals. Recursion //
-// 5. Increase resolution //
-// 6. Cool 3D visualizations of different algorithms and techniques. DFS/BFS, sorting algorithms, graph traversal, etc //
+//TO MAKE ART:
+// generate random cubes placement and such and make them move
