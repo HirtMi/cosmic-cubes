@@ -353,7 +353,8 @@ let cubes = [];
 let translations = [];
 let rotations = [];
 let colors = [];
-let ROTATION_SPEED = 1.5;
+const ROTATION_SPEED = 1.5;
+const TRANSLATION_SPEED = 5;
 
 function generateRandomCube(){
     let x = Math.random() * (WIDTH) * ((Math.random() - 0.5) * 2);
@@ -362,9 +363,9 @@ function generateRandomCube(){
     let size = Math.random() * (400 - 100) + 100;
     let color = randomColor();
     let translation = [
-         Math.random()*10 * ((Math.random() - 0.5) * 2),
-         Math.random()*10 * ((Math.random() - 0.5) * 2), 
-         Math.random()*10 * ((Math.random() - 0.5) * 2)
+         Math.random() * TRANSLATION_SPEED * ((Math.random() - 0.5) * 2),
+         Math.random() * TRANSLATION_SPEED * ((Math.random() - 0.5) * 2), 
+         Math.random() * TRANSLATION_SPEED * ((Math.random() - 0.5) * 2)
         ];
     let rotation = [
         Math.random() * ROTATION_SPEED * ((Math.random() - 0.5) * 2),
