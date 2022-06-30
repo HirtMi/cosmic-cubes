@@ -318,7 +318,6 @@ function Cube(x, y, z, size){
     }
 
     this.translate = function(dx, dy, dz){
-        console.log(this.center.z);
         this.center.x += dx;
         this.center.y += dy;
         this.center.z += dz;
@@ -356,10 +355,14 @@ let colors = [];
 const ROTATION_SPEED = 1.5;
 const TRANSLATION_SPEED = 5;
 
+var totalX = 0;
+
 function generateRandomCube(){
     let x = Math.random() * (WIDTH) * ((Math.random() - 0.5) * 2);
     let y = Math.random() * (HEIGHT) * ((Math.random() - 0.5) * 2);
     let z = Math.random() * HEIGHT * ((Math.random() - 0.5) * 2);
+    console.log(x,y,z);
+    totalX += x;
     let size = Math.random() * (400 - 100) + 100;
     let color = randomColor();
     let translation = [
@@ -381,9 +384,11 @@ function generateRandomCube(){
     colors.push(color);
 }
 
-for (i = 0; i < 101; i++){
+for (i = 0; i < 45; i++){
     generateRandomCube();
 }
+
+console.log(totalX / 50);
 
 // ----------------- Animation --------------------- //
 
