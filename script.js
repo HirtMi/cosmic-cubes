@@ -388,7 +388,7 @@ function generateRandomCube(){
     colors.push(color);
 }
 
-for (i=0;i<10;i++){
+for (i=0;i<30;i++){
     generateRandomCube();
 }
 
@@ -433,7 +433,7 @@ function animate(){
     // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     // ctx.fillStyle = "white";
     ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    setStroke(1, "#00aaff", 0.07);
+    // setStroke(1, "#00aaff", 0.07);
     // cube.connectVerticesToOrigin();
     // cube.drawFrame();
     // cube.translate(1,-1,-4);
@@ -446,6 +446,7 @@ function animate(){
 
     for (i = 0; i < cubes.length; i++){
         setStroke(2, colors[i], .007);
+        cubes[i].connectVerticesToOrigin();
         cubes[i].drawFrame();
         cubes[i].translate(translations[i][0], translations[i][1], translations[i][2]);
         cubes[i].rotate(rotations[i][0], rotations[i][1], rotations[i][2]);
