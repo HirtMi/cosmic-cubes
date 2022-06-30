@@ -203,9 +203,6 @@ function connectPolygons(poly1, poly2){
 }
 
 
-// Axes: X - left/right, Y - up/down, Z - front/back //
-// 'angle' is regular rotation in 2D (around Z-axis). 'depthAngle' is rotation front and back, around X-axis. Only need these 2 angles to construct vector in 3D space //
-// 'radsY' is introduced for rotation around Y axis //
 function Vector3D(origin, angle, depthAngle, magnitude){
     this.startX = origin.x;
     this.startY = origin.y;
@@ -245,12 +242,6 @@ function Vector3D(origin, angle, depthAngle, magnitude){
         if (angleZ != 0){this.rotateZ(angleZ);}
         if (angleX != 0){this.rotateX(angleX);}
         if (angleY != 0){this.rotateY(angleY);}
-    }
-
-
-    // no longer functional. remake function. will have to calculate new distance from starting point //
-    this.scale = function(scalar){
-        this.magnitude *= scalar;
     }
 
     this.translate = function(dx, dy, dz){
@@ -357,7 +348,6 @@ randomColor = function(){
     return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
-let randSign = (Math.random() - 0.5) * 2;
 
 let cubes = [];
 let translations = [];
@@ -389,37 +379,13 @@ function generateRandomCube(){
     colors.push(color);
 }
 
-for (i = 0; i < 150; i++){
+for (i = 0; i < 100; i++){
     generateRandomCube();
 }
 
-
-
-
-// ----------------- Testing --------------------- //
-
-// let polygons = [];
-// for (let i = 3; i < 12; i++){
-//     let polygon = new Polygon(0,0,i,20*i);
-//     polygon.construct();
-//     polygons.push(polygon);
-// }
-// setStroke(1, "black", 0.5);
-// for (let i = 0; i < polygons.length; i++){
-//     polygons[i].draw();
-// }
-
-// let origin = new Circle(0, 0, 3);
-// origin.draw();
-
-// let outline = new Circle(0,0,20*11);
-// outline.draw();
-
+// ----------------- Animation --------------------- //
 
 ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-
-let cube = new Cube(-150,100,300,300);
-let cube2 = new Cube(200,300,200,200);
 
 const fps = 60;
 let PLAY = true;
@@ -431,23 +397,8 @@ function animate(){
         }, 1000 / fps);
     }
 
-
-    // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    // ctx.fillStyle = "white";
-    // ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    // setStroke(1, "#00aaff", 0.07);
-    // cube.connectVerticesToOrigin();
-    // cube.drawFrame();
-    // cube.translate(1,-1,-4);
-    // cube.rotate(2,2,2);
-
-    // setStroke(1, "#ff33aa", 0.0007);
-    // cube2.drawFrame();
-    // cube2.translate(-1,-1,-1);
-    // cube2.rotate(-.5,1,-.5);
-
     for (i = 0; i < cubes.length; i++){
-        setStroke(2, colors[i], .007);
+        setStroke(2, colors[i], .01);
         cubes[i].connectVerticesToOrigin();
         cubes[i].drawFrame();
         cubes[i].translate(translations[i][0], translations[i][1], translations[i][2]);
@@ -461,10 +412,3 @@ window.addEventListener("click", function(){
     PLAY = !PLAY;
     if (PLAY == true){animate()};
 })
-
-
-
-// ------------------- End Testing ----------------- //
-
-//TO MAKE ART:
-// generate random cubes placement and such and make them move
