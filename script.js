@@ -377,6 +377,11 @@ randomColor = function(){
 // let outline = new Circle(0,0,20*11);
 // outline.draw();
 
+let v = new Vector3D(new Point(480,280,100), 50, 20, 200);
+let v2 = new Vector3D(new Point(480,280,100), 230, 20, 200);
+v.construct();
+v2.construct();
+
 let cube = new Cube(-150,100,300,300);
 let cube2 = new Cube(200,300,200,200);
 
@@ -392,18 +397,24 @@ function animate(){
 
 
     // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
-    ctx.fillStyle = "black";
+    // ctx.fillStyle = "white";
     ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     setStroke(1, "#00aaff", 0.07);
-    cube.connectVerticesToOrigin();
-    cube.drawFrame();
-    cube.translate(1,-1,-4);
-    cube.rotate(2,2,2);
+    // cube.connectVerticesToOrigin();
+    // cube.drawFrame();
+    // cube.translate(1,-1,-4);
+    // cube.rotate(2,2,2);
 
     setStroke(1, "#ff33aa", 0.07);
     cube2.drawFrame();
     cube2.translate(-1,-1,-1);
-    cube2.rotate(-1,2,-1);
+    cube2.rotate(-.5,1,-.5);
+
+    setStroke(3, randomColor(), 0.007);
+    v.draw();
+    v.rotate(1,0,2);
+    v2.draw();
+    v2.rotate(1,0,2);
 }
 animate();
 
