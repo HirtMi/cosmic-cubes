@@ -404,8 +404,8 @@ function animate(){
         cubes[i].translate(translations[i][0], translations[i][1], translations[i][2]);
         cubes[i].rotate(rotations[i][0], rotations[i][1], rotations[i][2]);
     }
-
 }
+
 animate();
 
 window.addEventListener("click", function(){
