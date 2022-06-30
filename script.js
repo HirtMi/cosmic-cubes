@@ -389,7 +389,7 @@ function generateRandomCube(){
     colors.push(color);
 }
 
-for (i=0;i<30;i++){
+for (i = 0; i < 150; i++){
     generateRandomCube();
 }
 
