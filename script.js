@@ -415,6 +415,7 @@ for (i=0;i<30;i++){
 // outline.draw();
 
 
+ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
 
 let cube = new Cube(-150,100,300,300);
 let cube2 = new Cube(200,300,200,200);
@@ -432,20 +433,20 @@ function animate(){
 
     // ctx.clearRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     // ctx.fillStyle = "white";
-    ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
+    // ctx.fillRect(-WIDTH/2, -HEIGHT/2, WIDTH, HEIGHT);
     // setStroke(1, "#00aaff", 0.07);
     // cube.connectVerticesToOrigin();
     // cube.drawFrame();
     // cube.translate(1,-1,-4);
     // cube.rotate(2,2,2);
 
-    setStroke(1, "#ff33aa", 0.0007);
-    cube2.drawFrame();
-    cube2.translate(-1,-1,-1);
-    cube2.rotate(-.5,1,-.5);
+    // setStroke(1, "#ff33aa", 0.0007);
+    // cube2.drawFrame();
+    // cube2.translate(-1,-1,-1);
+    // cube2.rotate(-.5,1,-.5);
 
     for (i = 0; i < cubes.length; i++){
-        setStroke(2, colors[i], .007);
+        setStroke(1, colors[i], .07);
         cubes[i].connectVerticesToOrigin();
         cubes[i].drawFrame();
         cubes[i].translate(translations[i][0], translations[i][1], translations[i][2]);
