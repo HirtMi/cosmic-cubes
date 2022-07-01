@@ -128,7 +128,9 @@ function Cube(x, y, z, size){
             this.vertices[i].y += dy;
             this.vertices[i].z += dz;
         }
-        this.scale(1 - (.001 * dz));
+        if (dz != 0){
+            this.scale(1 - (.001 * dz));
+        }
     }
 
     this.scale = function(scalar){
