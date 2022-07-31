@@ -64,9 +64,11 @@ function animate(){
     }
 }
 
+
 window.addEventListener("click", function(){
     PLAY = !PLAY;
     if (PLAY == true){animate()};
 })
+
 
 animate();
