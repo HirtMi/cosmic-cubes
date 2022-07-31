@@ -27,4 +27,4 @@ function setStroke(lineWidth, color, opacity){
 }
 
 
-export { canvas, ctx, connectPoints, setStroke, WIDTH, HEIGHT };
+export { connectPoints, setStroke, WIDTH, HEIGHT };
