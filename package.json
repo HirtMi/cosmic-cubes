@@ -1,0 +1,24 @@
+{
+  "name": "cosmic-cubes",
+  "version": "1.0.0",
+  "description": "An exercise in creating 3D geometry from scratch using HTML Canvas and Javascript, implemented in a webpage that generates cubes with random attributes to produce unique, evolving visuals.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hirtmi/cosmic-cubes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hirtmi/cosmic-cubes/issues"
+  },
+  "homepage": "https://github.com/hirtmi/cosmic-cubes#readme",
+  "devDependencies": {
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
