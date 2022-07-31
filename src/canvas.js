@@ -3,6 +3,8 @@ let WIDTH = window.innerWidth * SCALE;
 let HEIGHT = window.innerHeight * SCALE;
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
+
+
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 ctx.setTransform(1, 0, 0, -1, WIDTH / 2, HEIGHT / 2);
