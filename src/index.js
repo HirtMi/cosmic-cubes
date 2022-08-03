@@ -64,11 +64,13 @@ function animate(){
     }
 }
 
-
-window.addEventListener("click", function(){
+function pause(){
     PLAY = !PLAY;
     if (PLAY == true){animate()};
-})
+    console.log('test');
+}
 
+window.addEventListener("click", pause);
+window.addEventListener("touchstart", pause);
 
 animate();
