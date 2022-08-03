@@ -67,7 +67,6 @@ function animate(){
 function pause(){
     PLAY = !PLAY;
     if (PLAY == true){animate()};
-    console.log('test');
 }
 
 window.addEventListener("click", pause);
