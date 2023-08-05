@@ -1,5 +1,5 @@
 # cosmic-cubes
 
-An exercise in creating '3D' geometry with HTML Canvas, implemented in a webpage that generates cubes with random attributes to produce unique, evolving visuals. View it here:
+This creates '3D' cubes with random attributes to produce unique, evolving visuals. Made with vanilla Javascript and the canvas element.
 
-[hirt.im/cosmic-cubes](http://hirt.im/cosmic-cubes/)
+http://hirt.im/cosmic-cubes/
